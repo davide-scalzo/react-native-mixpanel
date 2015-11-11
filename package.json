@@ -1,0 +1,22 @@
+{
+  "name": "react-native-mixpanel",
+  "version": "0.0.1",
+  "description": "A React Native wrapper for Mixpanel tracking",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davodesign84/react-native-mixpanel.git"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": "Davide Scalzo <davidescalzo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davodesign84/react-native-mixpanel/issues"
+  },
+  "homepage": "https://github.com/davodesign84/react-native-mixpanel#readme"
+}
