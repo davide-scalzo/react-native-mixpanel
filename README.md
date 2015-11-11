@@ -1,7 +1,5 @@
 # react-native-mixpanel
-A React Native wrapper for Mixpanel tracking
-
-Super simple wrapper for Mixpanel tracking
+Super simple React Native wrapper for Mixpanel tracking
 
 ##Installation##
 1. `npm install react-native-mixpanel --save`
