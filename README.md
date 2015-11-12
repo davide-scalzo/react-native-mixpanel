@@ -19,7 +19,7 @@ var Mixpanel = require('react-native-mixpanel');
 Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN);
 
 //Send and event name with no properties
-Mixpanel.track('Event name');
+Mixpanel.track("Event name");
 
 //Track event with properties
 Mixpanel.trackWithProperties('Click Button', {button_type: 'yellow button', button_text: 'magic button'});
@@ -31,9 +31,27 @@ Mixpanel.createAlias(UNIQUE_ID)
 Mixpanel.identify(UNIQUE_ID)
 
 //Set People properties
-Mixpanel.set('$email', "elvis@email.com");
+Mixpanel.set("$email", "elvis@email.com");
+
+// Timing Events
+// Sets the start time for an action, for example uploading an image
+Mixpanel.timeEvent("Image Upload");
+// to be followed by a tracking event to define the end time
+Mixpanel.track("Image Upload");
+
+// Register super properties
+Mixpanel.registerSuperProperties({"Account type": "Free", "User Type": "Vendor"});
+
+// Register super properties Once
+Mixpanel.registerSuperProperties({"Gender": "Female"});
+
+// track Revenue
+Mixpanel.trackCharge(399);
+
+// track with properties
+Mixpanel.trackCharge(399, {"product": "ACME Wearable tech"});
+
 ```
 
 ##Notes##
 For more info please have a look at the [official Mixpanel reference](https://mixpanel.com/help/reference/ios) for iOS
-

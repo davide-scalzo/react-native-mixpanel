@@ -18,7 +18,7 @@ RCT_EXPORT_MODULE(RNMixpanel)
 
 // sharedInstanceWithToken
 RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
-
+    
     
     [Mixpanel sharedInstanceWithToken:apiToken];
     mixpanel = [Mixpanel sharedInstance];
@@ -50,9 +50,41 @@ RCT_EXPORT_METHOD(identify:(NSString *) uniqueId) {
     [mixpanel identify:uniqueId];
 }
 
+// Timing Events
+RCT_EXPORT_METHOD(timeEvent:(NSString *)event) {
+    [mixpanel timeEvent:event];
+    [mixpanel flush];
+}
+
+// Register super properties
+RCT_EXPORT_METHOD(registerSuperProperties:(NSDictionary *)properties) {
+    [mixpanel registerSuperProperties:properties];
+    [mixpanel flush];
+}
+
+// Register super properties Once
+RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties) {
+    [mixpanel registerSuperPropertiesOnce:properties];
+    [mixpanel flush];
+}
+
 // Set People Data
 RCT_EXPORT_METHOD(set:(NSString *)key value:(NSString *)value) {
     [mixpanel.people set:@{key: value}];
+}
+
+// track Revenue
+RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge) {
+    [mixpanel.people trackCharge:charge];
+    [mixpanel flush];
+    
+}
+
+// track with properties
+RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge properties:(NSDictionary *)properties) {
+    [mixpanel.people trackCharge:charge withProperties:properties];
+    [mixpanel flush];
+    
 }
 
 @end
