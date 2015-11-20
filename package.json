@@ -19,7 +19,7 @@
     "url": "https://github.com/davodesign84/react-native-mixpanel/issues"
   },
   "peerDependencies": {
-    "react-native": ">=11.0.0"
+    "react-native": ">=0.11.0"
   },
   "homepage": "https://github.com/davodesign84/react-native-mixpanel#readme"
 }
