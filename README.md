@@ -51,6 +51,9 @@ Mixpanel.trackCharge(399);
 // track with properties
 Mixpanel.trackCharge(399, {"product": "ACME Wearable tech"});
 
+// increment property
+Mixpanel.increment("Login Count", 1)
+
 ```
 
 ##Notes##
