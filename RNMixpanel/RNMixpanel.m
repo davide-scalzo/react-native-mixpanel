@@ -18,11 +18,11 @@ RCT_EXPORT_MODULE(RNMixpanel)
 
 // sharedInstanceWithToken
 RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
-    
-    
+
+
     [Mixpanel sharedInstanceWithToken:apiToken];
     mixpanel = [Mixpanel sharedInstance];
-    
+
 }
 
 
@@ -30,14 +30,14 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
 RCT_EXPORT_METHOD(track:(NSString *)event) {
     [mixpanel track:event];
     [mixpanel flush];
-    
+
 }
 
 // track with properties
 RCT_EXPORT_METHOD(trackWithProperties:(NSString *)event properties:(NSDictionary *)properties) {
     [mixpanel track:event properties:properties];
     [mixpanel flush];
-    
+
 }
 
 // create Alias
@@ -77,14 +77,20 @@ RCT_EXPORT_METHOD(set:(NSString *)key value:(NSString *)value) {
 RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge) {
     [mixpanel.people trackCharge:charge];
     [mixpanel flush];
-    
+
 }
 
 // track with properties
 RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge properties:(NSDictionary *)properties) {
     [mixpanel.people trackCharge:charge withProperties:properties];
     [mixpanel flush];
-    
+
+}
+
+// increment
+RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count) {
+  [mixpanel.people increment:property by:count];
+  [mixpanel flush];
 }
 
 @end
