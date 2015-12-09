@@ -8,6 +8,6 @@ Pod::Spec.new do |s|
   s.homepage     = 'n/a'
   s.source       = { :git => "https://github.com/davodesign84/react-native-mixpanel.git" }
   s.source_files = 'RNMixpanel/*'
-  s.platform     = :ios, "8.1"
+  s.platform     = :ios, "8.0"
   s.dependency 'Mixpanel'
 end
