@@ -93,4 +93,10 @@ RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count
   [mixpanel flush];
 }
 
+// reset
+RCT_EXPORT_METHOD(reset) {
+    [mixpanel reset];
+    [mixpanel flush];
+}
+
 @end
