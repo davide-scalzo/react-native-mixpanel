@@ -52,7 +52,10 @@ Mixpanel.trackCharge(399);
 Mixpanel.trackCharge(399, {"product": "ACME Wearable tech"});
 
 // increment property
-Mixpanel.increment("Login Count", 1)
+Mixpanel.increment("Login Count", 1);
+
+// Mixpanel reset method
+Mixpanel.reset();
 
 ```
 
