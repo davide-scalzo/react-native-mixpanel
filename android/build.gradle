@@ -35,5 +35,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.facebook.react:react-native:0.14.0'
     compile 'com.mixpanel.android:mixpanel-android:4.6.4'
-    compile 'com.google.android.gms:play-services:3.1+'
 }
