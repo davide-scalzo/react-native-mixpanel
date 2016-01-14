@@ -72,8 +72,8 @@ public class RNMixpanelManager extends ReactContextBaseJavaModule {
      * @param properties
      */
     @ReactMethod
-    public void track(String event, ReadableMap properties) {
-      mixpanel.track(event, this.readableMapToJson(properties));
+    public void track(String event) {
+      mixpanel.track(event);
     }
 
     /**
