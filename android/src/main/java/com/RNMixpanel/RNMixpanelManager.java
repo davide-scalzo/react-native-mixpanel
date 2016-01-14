@@ -1,7 +1,5 @@
 package com.RNMixpanel;
 
-//import android.content.pm.ApplicationInfo;
-//import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -44,20 +42,7 @@ public class RNMixpanelManager extends ReactContextBaseJavaModule {
      */
     public RNMixpanelManager(ReactApplicationContext reactContext) {
         super(reactContext);
-
         this.reactContext = reactContext;
-
-        /*
-        try {
-            ApplicationInfo info = reactContext.getPackageManager()
-                    .getApplicationInfo(
-                            reactContext.getPackageName(),
-                            PackageManager.GET_META_DATA
-                    );
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(this.getName(), "Failed to load package, NameNotFound: " + e.getMessage());
-        }
-        */
     }
 
     /**
@@ -77,7 +62,7 @@ public class RNMixpanelManager extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void sharedInstanceWithToken(String apiToken){
-      this.mixpanel = MixpanelAPI.getInstance(this.reactContext, apiToken);
+      mixpanel = MixpanelAPI.getInstance(this.reactContext, apiToken);
     }
 
     /**
@@ -100,7 +85,7 @@ public class RNMixpanelManager extends ReactContextBaseJavaModule {
     public void trackWithProperties(String event, ReadableMap properties) {
         mixpanel.track(event, this.readableMapToJson(properties));
     }
-    
+
     /**
      * Starts timing a Mixpanel event. PPTMixpanelManager.track() must be called once the event
      * you're timing is complete.
