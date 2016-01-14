@@ -62,7 +62,8 @@ public class RNMixpanelManager extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void sharedInstanceWithToken(String apiToken){
-      mixpanel = MixpanelAPI.getInstance(this.reactContext, apiToken);
+      this.mixpanel = MixpanelAPI.getInstance(this.reactContext, apiToken);
+      Log.d('mixpanel', mixpanel);
     }
 
     /**
@@ -73,7 +74,7 @@ public class RNMixpanelManager extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void track(String event, ReadableMap properties) {
-        mixpanel.track(event, this.readableMapToJson(properties));
+      mixpanel.track(event, this.readableMapToJson(properties));
     }
 
     /**
@@ -83,7 +84,8 @@ public class RNMixpanelManager extends ReactContextBaseJavaModule {
      * @param properties
      */
     public void trackWithProperties(String event, ReadableMap properties) {
-        mixpanel.track(event, this.readableMapToJson(properties));
+      mixpanel.track(event, this.readableMapToJson(properties));
+      Log.d('mixpanel', 'here');
     }
 
     /**
