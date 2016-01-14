@@ -92,6 +92,16 @@ public class RNMixpanelManager extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Tracks a Mixpanel event with properties. (for compatibilty with iOS version)
+     *
+     * @param event
+     * @param properties
+     */
+    public void trackWithProperties(String event, ReadableMap properties) {
+        mixpanel.track(event, this.readableMapToJson(properties));
+    }
+    
+    /**
      * Starts timing a Mixpanel event. PPTMixpanelManager.track() must be called once the event
      * you're timing is complete.
      *
