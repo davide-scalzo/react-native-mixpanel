@@ -1,7 +1,7 @@
 package com.RNMixpanel;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
+//import android.content.pm.ApplicationInfo;
+//import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
