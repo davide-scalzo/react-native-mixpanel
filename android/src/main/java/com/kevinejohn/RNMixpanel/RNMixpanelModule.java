@@ -129,6 +129,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     @ReactMethod
     public void identify(final String user_id) {
         mixpanel.identify(user_id);
+        mixpanel.getPeople().identify(user_id);
     }
 
     @ReactMethod
