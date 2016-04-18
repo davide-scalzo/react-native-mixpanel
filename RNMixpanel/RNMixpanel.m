@@ -9,6 +9,10 @@
 #import "RNMixpanel.h"
 #import "Mixpanel.h"
 
+@interface Mixpanel (ReactNative)
+- (void)applicationDidBecomeActive:(NSNotification *)notification;
+@end
+
 @implementation RNMixpanel
 
 Mixpanel *mixpanel = nil;
@@ -20,6 +24,11 @@ RCT_EXPORT_MODULE(RNMixpanel)
 RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
     [Mixpanel sharedInstanceWithToken:apiToken];
     mixpanel = [Mixpanel sharedInstance];
+    // React Native runs too late to listen for applicationDidBecomeActive, 
+    // so we expose the private method and call it explicitly here,
+    // to ensure that important things like initializing the flush timer and
+    // checking for pending surveys and notifications.
+    [mixpanel applicationDidBecomeActive:nil];
 }
 
 // track
