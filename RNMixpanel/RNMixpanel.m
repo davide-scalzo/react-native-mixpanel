@@ -24,7 +24,7 @@ RCT_EXPORT_MODULE(RNMixpanel)
 RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
     [Mixpanel sharedInstanceWithToken:apiToken];
     mixpanel = [Mixpanel sharedInstance];
-    // React Native runs too late to listen for applicationDidBecomeActive, 
+    // React Native runs too late to listen for applicationDidBecomeActive,
     // so we expose the private method and call it explicitly here,
     // to ensure that important things like initializing the flush timer and
     // checking for pending surveys and notifications.
@@ -72,8 +72,8 @@ RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties) {
 }
 
 // Set People Data
-RCT_EXPORT_METHOD(set:(NSString *)key value:(NSString *)value) {
-    [mixpanel.people set:@{key: value}];
+RCT_EXPORT_METHOD(set:(NSDictionary *)properties) {
+    [mixpanel.people set:properties];
 }
 
 // track Revenue
