@@ -31,6 +31,11 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
     [mixpanel applicationDidBecomeActive:nil];
 }
 
+// get distinct id
+RCT_EXPORT_METHOD(getDistinctId:(RCTResponseSenderBlock)callback) {
+    callback(@[mixpanel.distinctId]);
+}
+
 // track
 RCT_EXPORT_METHOD(track:(NSString *)event) {
     [mixpanel track:event];
