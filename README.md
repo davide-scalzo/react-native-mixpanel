@@ -74,7 +74,7 @@ Mixpanel.createAlias(UNIQUE_ID)
 Mixpanel.identify(UNIQUE_ID)
 
 //Set People properties
-Mixpanel.set("$email", "elvis@email.com");
+Mixpanel.set({"$email": "elvis@email.com"});
 
 // Timing Events
 // Sets the start time for an action, for example uploading an image
@@ -100,7 +100,9 @@ Mixpanel.increment("Login Count", 1);
 // Mixpanel reset method
 Mixpanel.reset();
 
-```
+// get the last distinct id set with identify or, if identify hasn't been
+// called, the default mixpanel id for this device.
+Mixpanel.getDistinctId(function(id){})
 
 ##Notes##
 For more info please have a look at the [official Mixpanel reference](https://mixpanel.com/help/reference/ios) for iOS
