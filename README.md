@@ -54,7 +54,7 @@ public class MainActivity extends ReactActivity {
 ```
 
 ##Usage##
-```
+```js
 //Require the module
 var Mixpanel = require('react-native-mixpanel');
 
