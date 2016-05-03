@@ -10,6 +10,7 @@
 #import "RNMixpanel.h"
 #import "Mixpanel.h"
 @import React;
+@import Mixpanel;
 
 @interface Mixpanel (ReactNative)
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
