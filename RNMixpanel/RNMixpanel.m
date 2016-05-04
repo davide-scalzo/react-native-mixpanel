@@ -76,6 +76,11 @@ RCT_EXPORT_METHOD(set:(NSDictionary *)properties) {
     [mixpanel.people set:properties];
 }
 
+// Set People Data Once
+RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties) {
+    [mixpanel.people setOnce: properties];
+}
+
 // track Revenue
 RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge) {
     [mixpanel.people trackCharge:charge];
