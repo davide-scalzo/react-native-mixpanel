@@ -76,6 +76,9 @@ Mixpanel.identify(UNIQUE_ID)
 //Set People properties
 Mixpanel.set("$email", "elvis@email.com");
 
+//Set People Properties Once
+Mixpanel.setOnce({"$email": "elvis@email.com", "Created": new Date().toISOString()});
+
 // Timing Events
 // Sets the start time for an action, for example uploading an image
 Mixpanel.timeEvent("Image Upload");
@@ -86,7 +89,7 @@ Mixpanel.track("Image Upload");
 Mixpanel.registerSuperProperties({"Account type": "Free", "User Type": "Vendor"});
 
 // Register super properties Once
-Mixpanel.registerSuperProperties({"Gender": "Female"});
+Mixpanel.registerSuperPropertiesOnce({"Gender": "Female"});
 
 // track Revenue
 Mixpanel.trackCharge(399);
