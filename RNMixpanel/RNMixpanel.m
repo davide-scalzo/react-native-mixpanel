@@ -3,11 +3,14 @@
 //  Dramsclub
 //
 //  Created by Davide Scalzo on 08/11/2015.
+//  Forked by Kevin Hylant on 5/3/2016.
 //  Copyright © 2015 Facebook. All rights reserved.
 //
 
 #import "RNMixpanel.h"
 #import "Mixpanel.h"
+@import React;
+@import Mixpanel;
 
 @interface Mixpanel (ReactNative)
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
