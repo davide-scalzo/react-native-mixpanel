@@ -10,5 +10,4 @@ Pod::Spec.new do |s|
   s.source_files = 'RNMixpanel/*'
   s.platform     = :ios, "7.0"
   s.dependency 'Mixpanel'
-  s.dependency 'React'
 end
