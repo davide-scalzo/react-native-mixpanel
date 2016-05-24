@@ -162,8 +162,15 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
-    public void set(final String key, final String value) {
-        mixpanel.getPeople().set(key, value);
+    public void set(final ReadableMap properties) {
+        JSONObject obj = null;
+        try {
+            obj = RNMixpanelModule.reactToJSON(props);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        mixpanel.getPeople().set(obj);
     }
 
     @ReactMethod
