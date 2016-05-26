@@ -11,7 +11,7 @@ Super simple React Native wrapper for Mixpanel tracking
 6. Run your project (`Cmd+R`)
 
 ##Usage##
-```
+```js
 //Require the module
 var Mixpanel = require('react-native-mixpanel');
 

@@ -56,6 +56,11 @@ RCT_EXPORT_METHOD(timeEvent:(NSString *)event) {
     [mixpanel flush];
 }
 
+// get distinct id
+RCT_EXPORT_METHOD(getDistinctId:(RCTResponseSenderBlock)callback) {
+    callback(@[mixpanel.distinctId]);
+}
+
 // Register super properties
 RCT_EXPORT_METHOD(registerSuperProperties:(NSDictionary *)properties) {
     [mixpanel registerSuperProperties:properties];
@@ -69,8 +74,8 @@ RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties) {
 }
 
 // Set People Data
-RCT_EXPORT_METHOD(set:(NSString *)key value:(NSString *)value) {
-    [mixpanel.people set:@{key: value}];
+RCT_EXPORT_METHOD(set:(NSDictionary *)properties) {
+    [mixpanel.people set:properties];
 }
 
 // track Revenue
