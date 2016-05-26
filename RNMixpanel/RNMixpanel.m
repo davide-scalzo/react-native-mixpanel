@@ -18,19 +18,14 @@ RCT_EXPORT_MODULE(RNMixpanel)
 
 // sharedInstanceWithToken
 RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
-
-
-    [Mixpanel sharedInstanceWithToken:apiToken];
+  [Mixpanel sharedInstanceWithToken:apiToken];
     mixpanel = [Mixpanel sharedInstance];
-
 }
-
 
 // track
 RCT_EXPORT_METHOD(track:(NSString *)event) {
     [mixpanel track:event];
     [mixpanel flush];
-
 }
 
 // track with properties
@@ -82,14 +77,12 @@ RCT_EXPORT_METHOD(set:(NSDictionary *)properties) {
 RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge) {
     [mixpanel.people trackCharge:charge];
     [mixpanel flush];
-
 }
 
 // track with properties
 RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge properties:(NSDictionary *)properties) {
     [mixpanel.people trackCharge:charge withProperties:properties];
     [mixpanel flush];
-
 }
 
 // increment
