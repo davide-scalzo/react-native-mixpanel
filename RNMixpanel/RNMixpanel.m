@@ -32,7 +32,6 @@ RCT_EXPORT_METHOD(track:(NSString *)event) {
 RCT_EXPORT_METHOD(trackWithProperties:(NSString *)event properties:(NSDictionary *)properties) {
     [mixpanel track:event properties:properties];
     [mixpanel flush];
-
 }
 
 // create Alias

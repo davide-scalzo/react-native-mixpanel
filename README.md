@@ -12,26 +12,31 @@ Super simple React Native wrapper for Mixpanel tracking
 
 ##Usage##
 ```js
-//Require the module
+// Require the module
 var Mixpanel = require('react-native-mixpanel');
 
-//Init Mixpanel SDK with your project token
+// Init Mixpanel SDK with your project token
 Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN);
 
-//Send and event name with no properties
+// Send and event name with no properties
 Mixpanel.track("Event name");
 
-//Track event with properties
+// Track event with properties
 Mixpanel.trackWithProperties('Click Button', {button_type: 'yellow button', button_text: 'magic button'});
 
-//Create Alias from unique id
+// Create Alias from unique id
 Mixpanel.createAlias(UNIQUE_ID)
 
-//Identify
+// Identify 
 Mixpanel.identify(UNIQUE_ID)
 
-//Set People properties
-Mixpanel.set("$email", "elvis@email.com");
+// Get Distinct ID
+Mixpanel.getDistinctId(function(id){
+	console.log(id);
+})
+
+// Set People properties
+Mixpanel.set({"$email": "elvis@email.com"});
 
 // Timing Events
 // Sets the start time for an action, for example uploading an image
@@ -45,13 +50,13 @@ Mixpanel.registerSuperProperties({"Account type": "Free", "User Type": "Vendor"}
 // Register super properties Once
 Mixpanel.registerSuperProperties({"Gender": "Female"});
 
-// track Revenue
+// Track Revenue
 Mixpanel.trackCharge(399);
 
-// track with properties
+// Track with properties
 Mixpanel.trackCharge(399, {"product": "ACME Wearable tech"});
 
-// increment property
+// Increment property
 Mixpanel.increment("Login Count", 1);
 
 // Mixpanel reset method
