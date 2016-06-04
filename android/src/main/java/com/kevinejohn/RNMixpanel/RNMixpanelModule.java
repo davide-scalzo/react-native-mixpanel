@@ -110,10 +110,10 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
-    public void trackWithProperties(final String name, final ReadableMap props) {
+    public void trackWithProperties(final String name, final ReadableMap properties) {
         JSONObject obj = null;
         try {
-            obj = RNMixpanelModule.reactToJSON(props);
+            obj = RNMixpanelModule.reactToJSON(properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -165,7 +165,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     public void set(final ReadableMap properties) {
         JSONObject obj = null;
         try {
-            obj = RNMixpanelModule.reactToJSON(props);
+            obj = RNMixpanelModule.reactToJSON(properties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
