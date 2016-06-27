@@ -87,6 +87,16 @@ RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties) {
     [mixpanel.people setOnce: properties];
 }
 
+// Add Person's Push Token
+RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)deviceToken) {
+    [mixpanel.people addPushDeviceToken:deviceToken];
+}
+
+// Remove Person's Push Token
+RCT_EXPORT_METHOD(removePushDeviceToken) {
+    [mixpanel.people removePushDeviceToken];
+}
+
 // track Revenue
 RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge) {
     [mixpanel.people trackCharge:charge];

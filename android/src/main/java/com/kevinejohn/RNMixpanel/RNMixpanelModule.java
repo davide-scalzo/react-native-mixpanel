@@ -185,6 +185,17 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         mixpanel.getPeople().setOnce(obj);
     }
 
+
+    @ReactMethod
+    public void addPushDeviceToken(final String token) {
+        mixpanel.getPeople().addPushDeviceToken(token);
+    }
+
+    @ReactMethod
+    public void removePushDeviceToken() {
+        mixpanel.getPeople().removePushDeviceToken();
+    }
+
     @ReactMethod
     public void trackCharge(final double charge) {
         mixpanel.getPeople().trackCharge(charge, null);
