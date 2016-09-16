@@ -186,14 +186,16 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
 
+    // Android only
     @ReactMethod
-    public void addPushDeviceToken(final String token) {
-        mixpanel.getPeople().addPushDeviceToken(token);
+    public void setPushRegistrationId(final String token) {
+        mixpanel.getPeople().setPushRegistrationId(token);
     }
 
+    // Android only
     @ReactMethod
-    public void removePushDeviceToken() {
-        mixpanel.getPeople().removePushDeviceToken();
+    public void clearPushRegistrationId() {
+        mixpanel.getPeople().clearPushRegistrationId();
     }
 
     @ReactMethod
