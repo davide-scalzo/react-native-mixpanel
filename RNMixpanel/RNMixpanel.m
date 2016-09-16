@@ -93,8 +93,8 @@ RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)deviceToken) {
 }
 
 // Remove Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(removePushDeviceToken) {
-    [mixpanel.people removePushDeviceToken];
+RCT_EXPORT_METHOD(removeAllPushDeviceTokens) {
+    [mixpanel.people removeAllPushDeviceTokens];
 }
 
 // track Revenue
