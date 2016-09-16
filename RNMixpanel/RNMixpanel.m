@@ -87,12 +87,12 @@ RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties) {
     [mixpanel.people setOnce: properties];
 }
 
-// Add Person's Push Token
+// Add Person's Push Token (iOS-only)
 RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)deviceToken) {
     [mixpanel.people addPushDeviceToken:deviceToken];
 }
 
-// Remove Person's Push Token
+// Remove Person's Push Token (iOS-only)
 RCT_EXPORT_METHOD(removePushDeviceToken) {
     [mixpanel.people removePushDeviceToken];
 }
@@ -109,7 +109,7 @@ RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge propertie
 
 // increment
 RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count) {
-  [mixpanel.people increment:property by:count];
+    [mixpanel.people increment:property by:count];
 }
 
 // reset
