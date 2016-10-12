@@ -88,8 +88,13 @@ RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties) {
 }
 
 // Add Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)deviceToken) {
+RCT_EXPORT_METHOD(addPushDeviceToken:(NSData *)deviceToken) {
     [mixpanel.people addPushDeviceToken:deviceToken];
+}
+
+// Remove Person's Push Token (iOS-only)
+RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken) {
+    [mixpanel.people removePushDeviceToken:deviceToken];
 }
 
 // Remove Person's Push Token (iOS-only)
