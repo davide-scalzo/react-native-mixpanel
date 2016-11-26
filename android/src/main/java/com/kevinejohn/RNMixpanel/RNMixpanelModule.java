@@ -228,4 +228,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
             mixpanel.flush();
         }
     }
+
+    @ReactMethod
+    public void getDistinctId(Callback callback) {
+        callback.invoke(mixpanel.getDistinctId());
+    }
 }
