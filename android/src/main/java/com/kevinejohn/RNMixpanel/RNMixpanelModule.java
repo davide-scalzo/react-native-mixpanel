@@ -206,6 +206,11 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         mixpanel.flush();
     }
 
+    @ReactMethod
+    public void initPushHandling(final String gcmSenderId) {
+        mixpanel.getPeople().initPushHandling(gcmSenderId);
+    }
+
     @Override
     public void onHostResume() {
         // Actvity `onResume`
