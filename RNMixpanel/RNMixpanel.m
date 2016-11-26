@@ -37,6 +37,18 @@ RCT_EXPORT_METHOD(getDistinctId:(RCTResponseSenderBlock)callback) {
     callback(@[mixpanel.distinctId]);
 }
 
+// get superProp
+RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop callback:(RCTResponseSenderBlock)callback) {
+    NSDictionary *currSuperProps = [mixpanel currentSuperProperties];
+    
+    if ([currSuperProps objectForKey:prop]) {
+        NSString *superProp = currSuperProps[prop];
+        callback(@[superProp]);
+    } else {
+        callback(@[[NSNull null]]);
+    }
+}
+
 // track
 RCT_EXPORT_METHOD(track:(NSString *)event) {
     [mixpanel track:event];
