@@ -99,6 +99,21 @@ RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties) {
     [mixpanel.people setOnce: properties];
 }
 
+// Add Person's Push Token (iOS-only)
+RCT_EXPORT_METHOD(addPushDeviceToken:(NSData *)deviceToken) {
+    [mixpanel.people addPushDeviceToken:deviceToken];
+}
+
+// Remove Person's Push Token (iOS-only)
+RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken) {
+    [mixpanel.people removePushDeviceToken:deviceToken];
+}
+
+// Remove Person's Push Token (iOS-only)
+RCT_EXPORT_METHOD(removeAllPushDeviceTokens) {
+    [mixpanel.people removeAllPushDeviceTokens];
+}
+
 // track Revenue
 RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge) {
     [mixpanel.people trackCharge:charge];
@@ -111,7 +126,7 @@ RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge propertie
 
 // increment
 RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count) {
-  [mixpanel.people increment:property by:count];
+    [mixpanel.people increment:property by:count];
 }
 
 // addPushDeviceToken
