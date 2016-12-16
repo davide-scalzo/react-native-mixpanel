@@ -1,5 +1,6 @@
 package com.kevinejohn.RNMixpanel;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -259,8 +260,8 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
     }
 
-//     @ReactMethod
-//     public void getDistinctId(Callback callback) {
-//         callback.invoke(mixpanel.getDistinctId());
-//     }
+    @ReactMethod
+    public void getDistinctId(Callback callback) {
+        callback.invoke(mixpanel.getDistinctId());
+    }
 }
