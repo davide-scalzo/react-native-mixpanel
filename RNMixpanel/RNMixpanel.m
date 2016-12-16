@@ -34,7 +34,7 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
 
 // get distinct id
 RCT_EXPORT_METHOD(getDistinctId:(RCTResponseSenderBlock)callback) {
-    callback(@[mixpanel.distinctId]);
+    callback(@[mixpanel.distinctId ?: @""]);
 }
 
 // get superProp
