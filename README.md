@@ -1,5 +1,13 @@
-# react-native-mixpanel
-Super simple React Native wrapper for Mixpanel tracking
+#Installation
+- Run `npm install react-native-mixpanel --save`
+- Run `npm install link react-native-mixpanel`
+  - (for RN 0.29.1+; otherwise use `rnpm link react-native-mixpanel`)
+
+##Additional Step for iOS##
+- Install Mixpanel iOS SDK via either Cocoapods or manually [more info here](https://mixpanel.com/help/reference/ios)
+
+
+#Manual Installation
 
 ##Installation iOS##
 1. `npm install react-native-mixpanel --save`
@@ -32,7 +40,7 @@ dependencies {
 
 * register module (in MainActivity.java)
 
-On newer versions of React Native (0.18+):
+On newer versions of React Native register module (MainApplication.java):
 
 ```java
 import com.kevinejohn.RNMixpanel.*;  // <--- import
@@ -53,7 +61,8 @@ public class MainActivity extends ReactActivity {
 }
 ```
 
-##Usage##
+#Usage
+
 ```js
 //Require the module
 var Mixpanel = require('react-native-mixpanel');
