@@ -163,6 +163,13 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
+    public void initPushHandling (final String token) {
+        mixpanel.getPeople().initPushHandling(token);
+    }
+
+
+
+    @ReactMethod
     public void set(final ReadableMap properties) {
         JSONObject obj = null;
         try {
