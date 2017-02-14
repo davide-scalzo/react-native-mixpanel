@@ -1,7 +1,7 @@
 #Installation
 - Run `npm install react-native-mixpanel --save`
 - Run `npm install link react-native-mixpanel`
-(for RN 0.29.1+; otherwise use `rnpm link react-native-mixpanel`)
+  - (for RN 0.29.1+; otherwise use `rnpm link react-native-mixpanel`)
 
 ##Additional Step for iOS##
 - Install Mixpanel iOS SDK via either Cocoapods or manually [more info here](https://mixpanel.com/help/reference/ios)
