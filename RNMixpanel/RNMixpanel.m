@@ -40,7 +40,7 @@ RCT_EXPORT_METHOD(getDistinctId:(RCTResponseSenderBlock)callback) {
 // get superProp
 RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop callback:(RCTResponseSenderBlock)callback) {
     NSDictionary *currSuperProps = [mixpanel currentSuperProperties];
-    
+
     if ([currSuperProps objectForKey:prop]) {
         NSString *superProp = currSuperProps[prop];
         callback(@[superProp]);
@@ -137,6 +137,8 @@ RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count
 // reset
 RCT_EXPORT_METHOD(reset) {
     [mixpanel reset];
+    NSString *uuid = [[NSUUID UUID] UUIDString];
+    [mixpanel identify:uuid];
 }
 
 @end
