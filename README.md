@@ -111,7 +111,7 @@ Mixpanel.increment("Login Count", 1);
 
 // send push notifications token to Mixpanel
 // Android
-Mixpanel.initPushHandling("GCM/FCM sender ID");
+Mixpanel.setPushRegistrationId("GCM/FCM push token");
 // iOS
 Mixpanel.addPushDeviceToken("APNS push token")
 
