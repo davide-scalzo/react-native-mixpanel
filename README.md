@@ -109,6 +109,9 @@ Mixpanel.trackChargeWithProperties(399, {"product": "ACME Wearable tech"});
 // increment property
 Mixpanel.increment("Login Count", 1);
 
+// send push notifications token to Mixpanel
+Mixpanel.initPushHandling("token_from_apple_or_google");
+
 // Mixpanel reset method
 Mixpanel.reset();
 
