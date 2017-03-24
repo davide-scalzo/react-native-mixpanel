@@ -1,15 +1,15 @@
-#Installation
+# Installation
 - Run `npm install react-native-mixpanel --save`
 - Run `npm install link react-native-mixpanel`
   - (for RN 0.29.1+; otherwise use `rnpm link react-native-mixpanel`)
 
-##Additional Step for iOS##
+## Additional Step for iOS ##
 - Install Mixpanel iOS SDK via either Cocoapods or manually [more info here](https://mixpanel.com/help/reference/ios)
 
 
-#Manual Installation
+# Manual Installation
 
-##Installation iOS##
+## Installation iOS ##
 1. `npm install react-native-mixpanel --save`
 2. Install Mixpanel iOS SDK via either Cocoapods or manually [more info here](https://mixpanel.com/help/reference/ios)
 2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
@@ -18,7 +18,7 @@
 5. Click `RNMixpanel.xcodeproj` in the project navigator and go the `Build Settings` tab. Make sure 'All' is toggled on (instead of 'Basic'). Look for `Header Search Paths` and make sure it contains both `$(SRCROOT)/../react-native/React` and `$(SRCROOT)/../../React` - mark both as `recursive`.
 6. Run your project (`Cmd+R`)
 
-##Installation Android##
+## Installation Android ##
 
 * In `android/setting.gradle`
 
@@ -61,7 +61,7 @@ public class MainActivity extends ReactActivity {
 }
 ```
 
-#Usage
+# Usage
 
 ```js
 //Require the module
@@ -120,5 +120,5 @@ Mixpanel.reset();
 Mixpanel.getDistinctId(function(id){})
 ```
 
-##Notes##
+## Notes ##
 For more info please have a look at the [official Mixpanel reference](https://mixpanel.com/help/reference/ios) for iOS
