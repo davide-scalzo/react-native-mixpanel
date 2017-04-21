@@ -1,7 +1,15 @@
-# react-native-mixpanel
-Super simple React Native wrapper for Mixpanel tracking
+# Installation
+- Run `npm install react-native-mixpanel --save`
+- Run `react-native link react-native-mixpanel`
+  - (for RN 0.29.1+; otherwise use `rnpm link react-native-mixpanel`)
 
-##Installation iOS##
+## Additional Step for iOS ##
+- Install Mixpanel iOS SDK via either Cocoapods or manually [more info here](https://mixpanel.com/help/reference/ios)
+
+
+# Manual Installation
+
+## Installation iOS ##
 1. `npm install react-native-mixpanel --save`
 2. Install Mixpanel iOS SDK via either Cocoapods or manually [more info here](https://mixpanel.com/help/reference/ios)
 2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
@@ -10,7 +18,7 @@ Super simple React Native wrapper for Mixpanel tracking
 5. Click `RNMixpanel.xcodeproj` in the project navigator and go the `Build Settings` tab. Make sure 'All' is toggled on (instead of 'Basic'). Look for `Header Search Paths` and make sure it contains both `$(SRCROOT)/../react-native/React` and `$(SRCROOT)/../../React` - mark both as `recursive`.
 6. Run your project (`Cmd+R`)
 
-##Installation Android##
+## Installation Android ##
 
 * In `android/setting.gradle`
 
@@ -32,7 +40,7 @@ dependencies {
 
 * register module (in MainActivity.java)
 
-On newer versions of React Native (0.18+):
+On newer versions of React Native register module (MainApplication.java):
 
 ```java
 import com.kevinejohn.RNMixpanel.*;  // <--- import
@@ -53,7 +61,8 @@ public class MainActivity extends ReactActivity {
 }
 ```
 
-##Usage##
+# Usage
+
 ```js
 //Require the module
 var Mixpanel = require('react-native-mixpanel');
@@ -95,10 +104,16 @@ Mixpanel.registerSuperPropertiesOnce({"Gender": "Female"});
 Mixpanel.trackCharge(399);
 
 // track with properties
-Mixpanel.trackCharge(399, {"product": "ACME Wearable tech"});
+Mixpanel.trackChargeWithProperties(399, {"product": "ACME Wearable tech"});
 
 // increment property
 Mixpanel.increment("Login Count", 1);
+
+// send push notifications token to Mixpanel
+// Android
+Mixpanel.setPushRegistrationId("GCM/FCM push token");
+// iOS
+Mixpanel.addPushDeviceToken("APNS push token")
 
 // Mixpanel reset method
 Mixpanel.reset();
@@ -106,6 +121,7 @@ Mixpanel.reset();
 // get the last distinct id set with identify or, if identify hasn't been
 // called, the default mixpanel id for this device.
 Mixpanel.getDistinctId(function(id){})
+```
 
-##Notes##
+## Notes ##
 For more info please have a look at the [official Mixpanel reference](https://mixpanel.com/help/reference/ios) for iOS

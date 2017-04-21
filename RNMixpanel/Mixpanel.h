@@ -750,6 +750,21 @@
  People</b>.
  */
 @interface MixpanelPeople : NSObject
+/*!
+ @property
+
+ @abstract
+ controls the $ignore_time property in any subsequent MixpanelPeople operation.
+
+ If the $ignore_time property is present and true in your request,
+ Mixpanel will not automatically update the "Last Seen" property of the profile.
+ Otherwise, Mixpanel will add a "Last Seen" property associated with the
+ current time for all $set, $append, and $add operations
+
+ @discussion
+ Defaults to NO.
+ */
+@property (atomic) BOOL ignoreTime;
 
 /*!
  @method
@@ -772,6 +787,30 @@
  @method
 
  @abstract
+ Unregister the given device to receive push notifications.
+
+ @discussion
+ This will unset all of the push tokens saved to this people profile. This is useful
+ in conjunction with a call to `reset`, or when a user is logging out.
+ */
+- (void)removeAllPushDeviceTokens;
+
+/*!
+ @method
+
+ @abstract
+ Unregister a specific device token from the ability to receive push notifications.
+
+ @discussion
+ This will remove the provided push token saved to this people profile. This is useful
+ in conjunction with a call to `reset`, or when a user is logging out.
+ */
+- (void)removePushDeviceToken:(NSData *)deviceToken;
+
+/*!
+ @method
+
+ @abstract
  Set properties on the current user in Mixpanel People.
 
  @discussion
@@ -789,9 +828,6 @@
  // applies to both Mixpanel Engagement track: AND Mixpanel People set: and
  // increment: calls
  [mixpanel identify:distinctId];
-
- // applies ONLY to Mixpanel People set: and increment: calls
- [mixpanel.people identify:distinctId];
  </pre>
 
  @param properties       properties dictionary
@@ -833,6 +869,22 @@
 
  */
 - (void)setOnce:(NSDictionary *)properties;
+
+/*!
+ @method
+
+ @abstract
+ Remove a list of properties and their values from the current user's profile
+ in Mixpanel People.
+
+ @discussion
+ The properties array must ony contain NSString names of properties. For properties
+ that don't exist there will be no effect.
+
+ @param properties       properties array
+
+ */
+- (void)unset:(NSArray *)properties;
 
 /*!
  @method
@@ -894,6 +946,22 @@
  @method
 
  @abstract
+ Remove list properties.
+
+ @discussion
+ Property keys must be <code>NSString</code> objects and values must be
+ <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+ <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+ <code>NSURL</code> objects.
+
+ @param properties      mapping of list property names to values to remove
+ */
+- (void)remove:(NSDictionary *)properties;
+
+/*!
+ @method
+
+ @abstract
  Track money spent by the current user for revenue analytics.
 
  @param amount          amount of revenue received
@@ -912,7 +980,7 @@
  could record a product ID with each charge so that you could segment on it in
  revenue analytics to see which products are generating the most revenue.
  */
-- (void)trackCharge:(NSNumber *)amount withProperties:(NSDictionary *)properties;
+- (void)trackCharge:(NSNumber *)amount withProperties:(nullable NSDictionary *)properties;
 
 
 /*!

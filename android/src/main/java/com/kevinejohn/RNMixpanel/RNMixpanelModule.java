@@ -1,5 +1,6 @@
 package com.kevinejohn.RNMixpanel;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -162,6 +163,13 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
+    public void initPushHandling (final String token) {
+        mixpanel.getPeople().initPushHandling(token);
+    }
+
+
+
+    @ReactMethod
     public void set(final ReadableMap properties) {
         JSONObject obj = null;
         try {
@@ -171,6 +179,31 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
 
         mixpanel.getPeople().set(obj);
+    }
+
+    @ReactMethod
+    public void setOnce(final ReadableMap properties) {
+        JSONObject obj = null;
+        try {
+            obj = RNMixpanelModule.reactToJSON(properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        mixpanel.getPeople().setOnce(obj);
+    }
+
+
+    // Android only
+    @ReactMethod
+    public void setPushRegistrationId(final String token) {
+        mixpanel.getPeople().setPushRegistrationId(token);
+    }
+
+    // Android only
+    @ReactMethod
+    public void clearPushRegistrationId() {
+        mixpanel.getPeople().clearPushRegistrationId();
     }
 
     @ReactMethod
@@ -232,5 +265,24 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         if (mixpanel != null) {
             mixpanel.flush();
         }
+    }
+
+    @ReactMethod
+    public void getSuperProperty(final String property, Callback callback) {
+        String[] prop = new String[1];
+
+        try {
+            JSONObject currProps = mixpanel.getSuperProperties();
+            prop[0] = currProps.getString(property);
+            callback.invoke(prop);
+        } catch (JSONException e) {
+            prop[0] = null;
+            callback.invoke(prop);
+        }
+    }
+
+    @ReactMethod
+    public void getDistinctId(Callback callback) {
+        callback.invoke(mixpanel.getDistinctId());
     }
 }

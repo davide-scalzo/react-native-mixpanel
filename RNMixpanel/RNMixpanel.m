@@ -34,7 +34,19 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
 
 // get distinct id
 RCT_EXPORT_METHOD(getDistinctId:(RCTResponseSenderBlock)callback) {
-    callback(@[mixpanel.distinctId]);
+    callback(@[mixpanel.distinctId ?: @""]);
+}
+
+// get superProp
+RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop callback:(RCTResponseSenderBlock)callback) {
+    NSDictionary *currSuperProps = [mixpanel currentSuperProperties];
+
+    if ([currSuperProps objectForKey:prop]) {
+        NSString *superProp = currSuperProps[prop];
+        callback(@[superProp]);
+    } else {
+        callback(@[[NSNull null]]);
+    }
 }
 
 // track
@@ -77,6 +89,11 @@ RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties) {
     [mixpanel registerSuperPropertiesOnce:properties];
 }
 
+// Init push notification
+RCT_EXPORT_METHOD(initPushHandling:(NSString *) token) {
+     [mixpanel.people addPushDeviceToken:token];
+}
+
 // Set People Data
 RCT_EXPORT_METHOD(set:(NSDictionary *)properties) {
     [mixpanel.people set:properties];
@@ -85,6 +102,21 @@ RCT_EXPORT_METHOD(set:(NSDictionary *)properties) {
 // Set People Data Once
 RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties) {
     [mixpanel.people setOnce: properties];
+}
+
+// Add Person's Push Token (iOS-only)
+RCT_EXPORT_METHOD(addPushDeviceToken:(NSData *)deviceToken) {
+    [mixpanel.people addPushDeviceToken:deviceToken];
+}
+
+// Remove Person's Push Token (iOS-only)
+RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken) {
+    [mixpanel.people removePushDeviceToken:deviceToken];
+}
+
+// Remove Person's Push Token (iOS-only)
+RCT_EXPORT_METHOD(removeAllPushDeviceTokens) {
+    [mixpanel.people removeAllPushDeviceTokens];
 }
 
 // track Revenue
@@ -99,7 +131,7 @@ RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge propertie
 
 // increment
 RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count) {
-  [mixpanel.people increment:property by:count];
+    [mixpanel.people increment:property by:count];
 }
 
  // addPushDeviceToken
@@ -120,6 +152,8 @@ RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count
 // reset
 RCT_EXPORT_METHOD(reset) {
     [mixpanel reset];
+    NSString *uuid = [[NSUUID UUID] UUIDString];
+    [mixpanel identify:uuid];
 }
 
 @end
