@@ -1,3 +1,5 @@
+[![BCH compliance](https://bettercodehub.com/edge/badge/davodesign84/react-native-mixpanel?branch=master)](https://bettercodehub.com/)
+
 # Installation
 - Run `npm install react-native-mixpanel --save`
 - Run `react-native link react-native-mixpanel`
