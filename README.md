@@ -114,6 +114,14 @@ Mixpanel.increment("Login Count", 1);
 // send push notifications token to Mixpanel
 // Android
 Mixpanel.setPushRegistrationId("GCM/FCM push token");
+
+//tell Mixpanel which user record in People Analytics should receive the messages when they are sent from the Mixpanel app,
+//make sure you call this right after you call `identify`
+Mixpanel.initPushHandling(YOUR_12_DIGIT_GOOGLE_SENDER_ID);
+
+//unregister a device for push notifications
+Mixpanel.clearPushRegistrationId();
+
 // iOS
 Mixpanel.addPushDeviceToken("APNS push token")
 
