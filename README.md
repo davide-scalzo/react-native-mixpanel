@@ -1,5 +1,11 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/davodesign84/react-native-mixpanel?branch=master)](https://bettercodehub.com/)
 
+
+# Description
+React Native wrapper for Mixpanel library, on top of the regular javascript sdk you can normally use, this provides you all the goodies of the native wrapper including notifications, analysis of the operating system, surveys etc..
+
+If you'd like to support, you can donate some Ether to this address: 0x4cD5D72FFd950260e47F9e14F45811C5cCDD0283
+
 # Installation
 - Run `npm install react-native-mixpanel --save`
 - Run `react-native link react-native-mixpanel`
