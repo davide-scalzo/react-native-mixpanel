@@ -7,11 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5EAEEA4A1F05561F00C6FED8 /* RNMixpanel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FDC64AF31BF1690D0044C1B4 /* RNMixpanel.h */; };
+		5EAEEA4B1F05562C00C6FED8 /* RNMixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC64AF51BF1690D0044C1B4 /* RNMixpanel.m */; };
 		FDC64AF41BF1690D0044C1B4 /* RNMixpanel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FDC64AF31BF1690D0044C1B4 /* RNMixpanel.h */; };
 		FDC64AF61BF1690D0044C1B4 /* RNMixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC64AF51BF1690D0044C1B4 /* RNMixpanel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		5EAEEA3F1F0555B100C6FED8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				5EAEEA4A1F05561F00C6FED8 /* RNMixpanel.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FDC64AEE1BF1690D0044C1B4 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -25,6 +37,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5EAEEA411F0555B100C6FED8 /* libRNMixpanel-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libRNMixpanel-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDC64AF01BF1690D0044C1B4 /* libRNMixpanel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNMixpanel.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDC64AF31BF1690D0044C1B4 /* RNMixpanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNMixpanel.h; sourceTree = "<group>"; };
 		FDC64AF51BF1690D0044C1B4 /* RNMixpanel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNMixpanel.m; sourceTree = "<group>"; };
@@ -34,6 +47,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5EAEEA3E1F0555B100C6FED8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FDC64AED1BF1690D0044C1B4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -58,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				FDC64AF01BF1690D0044C1B4 /* libRNMixpanel.a */,
+				5EAEEA411F0555B100C6FED8 /* libRNMixpanel-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -75,6 +96,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5EAEEA401F0555B100C6FED8 /* RNMixpanel-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EAEEA491F0555B100C6FED8 /* Build configuration list for PBXNativeTarget "RNMixpanel-tvOS" */;
+			buildPhases = (
+				5EAEEA3D1F0555B100C6FED8 /* Sources */,
+				5EAEEA3E1F0555B100C6FED8 /* Frameworks */,
+				5EAEEA3F1F0555B100C6FED8 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "RNMixpanel-tvOS";
+			productName = "RNMixpanel-tvOS";
+			productReference = 5EAEEA411F0555B100C6FED8 /* libRNMixpanel-tvOS.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		FDC64AEF1BF1690D0044C1B4 /* RNMixpanel */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FDC64AF91BF1690D0044C1B4 /* Build configuration list for PBXNativeTarget "RNMixpanel" */;
@@ -101,6 +139,10 @@
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Davide Scalzo";
 				TargetAttributes = {
+					5EAEEA401F0555B100C6FED8 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
 					FDC64AEF1BF1690D0044C1B4 = {
 						CreatedOnToolsVersion = 7.1;
 					};
@@ -119,11 +161,20 @@
 			projectRoot = "";
 			targets = (
 				FDC64AEF1BF1690D0044C1B4 /* RNMixpanel */,
+				5EAEEA401F0555B100C6FED8 /* RNMixpanel-tvOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5EAEEA3D1F0555B100C6FED8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EAEEA4B1F05562C00C6FED8 /* RNMixpanel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FDC64AEC1BF1690D0044C1B4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -135,6 +186,41 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		5EAEEA471F0555B100C6FED8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TVOS_DEPLOYMENT_TARGET = 10.2;
+			};
+			name = Debug;
+		};
+		5EAEEA481F0555B100C6FED8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TVOS_DEPLOYMENT_TARGET = 10.2;
+			};
+			name = Release;
+		};
 		FDC64AF71BF1690D0044C1B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -253,6 +339,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5EAEEA491F0555B100C6FED8 /* Build configuration list for PBXNativeTarget "RNMixpanel-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EAEEA471F0555B100C6FED8 /* Debug */,
+				5EAEEA481F0555B100C6FED8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		FDC64AEB1BF1690D0044C1B4 /* Build configuration list for PBXProject "RNMixpanel" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
