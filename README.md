@@ -1,3 +1,11 @@
+[![BCH compliance](https://bettercodehub.com/edge/badge/davodesign84/react-native-mixpanel?branch=master)](https://bettercodehub.com/)
+
+
+# Description
+React Native wrapper for Mixpanel library, on top of the regular javascript sdk you can normally use, this provides you all the goodies of the native wrapper including notifications, analysis of the operating system, surveys etc..
+
+If you'd like to support, you can donate some Ether to this address: 0x4cD5D72FFd950260e47F9e14F45811C5cCDD0283
+
 # Installation
 - Run `npm install react-native-mixpanel --save`
 - Run `react-native link react-native-mixpanel`
@@ -112,6 +120,14 @@ Mixpanel.increment("Login Count", 1);
 // send push notifications token to Mixpanel
 // Android
 Mixpanel.setPushRegistrationId("GCM/FCM push token");
+
+//tell Mixpanel which user record in People Analytics should receive the messages when they are sent from the Mixpanel app,
+//make sure you call this right after you call `identify`
+Mixpanel.initPushHandling(YOUR_12_DIGIT_GOOGLE_SENDER_ID);
+
+//unregister a device for push notifications
+Mixpanel.clearPushRegistrationId();
+
 // iOS
 Mixpanel.addPushDeviceToken("APNS push token")
 
