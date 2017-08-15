@@ -32,8 +32,8 @@ If you'd like to support, you can donate some Ether to this address: 0x4cD5D72FF
 
 ```gradle
 ...
-include ':RNMixpanel', ':app'
-project(':RNMixpanel').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mixpanel/android')
+include ':react-native-mixpanel', ':app'
+project(':react-native-mixpanel').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mixpanel/android')
 ```
 
 * In `android/app/build.gradle`
@@ -42,7 +42,7 @@ project(':RNMixpanel').projectDir = new File(rootProject.projectDir, '../node_mo
 ...
 dependencies {
     ...
-    compile project(':RNMixpanel')
+    compile project(':react-native-mixpanel')
 }
 ```
 
