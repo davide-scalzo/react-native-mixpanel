@@ -23,8 +23,7 @@ RCT_EXPORT_MODULE(RNMixpanel)
 
 // sharedInstanceWithToken
 RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
-    [Mixpanel sharedInstanceWithToken:apiToken];
-    mixpanel = [Mixpanel sharedInstance];
+    mixpanel = [Mixpanel sharedInstanceWithToken:apiToken];
     // React Native runs too late to listen for applicationDidBecomeActive,
     // so we expose the private method and call it explicitly here,
     // to ensure that important things like initializing the flush timer and
