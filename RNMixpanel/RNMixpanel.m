@@ -91,7 +91,7 @@ RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties) {
 
 // Init push notification
 RCT_EXPORT_METHOD(initPushHandling:(NSString *) token) {
-     [mixpanel.people addPushDeviceToken:token];
+     [self addPushDeviceToken:token];
 }
 
 // Set People Data
