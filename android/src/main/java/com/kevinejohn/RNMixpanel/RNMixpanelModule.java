@@ -264,15 +264,11 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @ReactMethod
     public void getSuperProperty(final String property, Callback callback) {
-        String[] prop = new String[1];
-
         try {
             JSONObject currProps = mixpanel.getSuperProperties();
-            prop[0] = currProps.getString(property);
-            callback.invoke(prop);
+            callback.invoke(currProps.getString(property));
         } catch (JSONException e) {
-            prop[0] = null;
-            callback.invoke(prop);
+            callback.invoke((String)null);
         }
     }
 
