@@ -20,7 +20,8 @@
 NSDictionary *instances = nil;
 
 -(Mixpanel*) getInstance: (NSString *)name {
-    return [instances objectForKey:name]; // currently no error is thrown if an instance is missing
+    Mixpanel* instance = [instances objectForKey:name]; // currently no error is thrown if an instance is missing
+    return instance;
 }
 
 // Expose this module to the React Native bridge
@@ -47,20 +48,19 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
 
 
 // get distinct id
-RCT_EXPORT_METHOD(getDistinctId:(NSString *)apiToken callback:(RCTResponseSenderBlock)callback) {
-    callback(@[[self getInstance:apiToken].distinctId ?: @""]);
+RCT_EXPORT_METHOD(getDistinctId:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    resolve([self getInstance:apiToken].distinctId);
 }
 
 // get superProp
-RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop apiToken:(NSString *)apiToken callback:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     NSDictionary *currSuperProps = [[self getInstance:apiToken] currentSuperProperties];
-
-    if ([currSuperProps objectForKey:prop]) {
-        NSString *superProp = currSuperProps[prop];
-        callback(@[superProp]);
-    } else {
-        callback(@[[NSNull null]]);
-    }
+    resolve([currSuperProps objectForKey:prop]);
 }
 
 // track
@@ -164,5 +164,6 @@ RCT_EXPORT_METHOD(reset:(NSString *)apiToken) {
     NSString *uuid = [[NSUUID UUID] UUIDString];
     [[self getInstance:apiToken] identify:uuid];
 }
+
 
 @end

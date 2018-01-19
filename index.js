@@ -20,12 +20,18 @@ export class MixpanelInstance {
     return RNMixpanel.sharedInstanceWithToken(this.apiToken)
   }
 
-  getDistinctId(callback: (id: string) => void) {
-    RNMixpanel.getDistinctId(this.apiToken, callback) // callbacks have to come last but token is for a rare use case so they are switched when calling the native module
+  /*
+  Gets the unique identifier for the current user.  Returns a promise that resolves with the value.
+  */
+  getDistinctId(): Promise<string> {
+    return RNMixpanel.getDistinctId(this.apiToken)
   }
 
-  getSuperProperty(propertyName: string, callback: (value: mixed) => void) {
-    RNMixpanel.getSuperProperty(propertyName, this.apiToken, callback)
+  /*
+  Gets the given super property.  Returns a promise that resolves to the value.
+  */
+  getSuperProperty(propertyName: string): Promise<mixed> {
+    return RNMixpanel.getSuperProperty(propertyName, this.apiToken)
   }
 
   track(event: string, properties?: Object) {
@@ -104,6 +110,14 @@ export class MixpanelInstance {
 let defaultInstance:?MixpanelInstance = null
 const NO_INSTANCE_ERROR = 'No mixpanel instance created yet.  You must call sharedInstanceWithToken before anything else and should wait for its promise to fulfill before others calls to avoid any internal native issue.'
 
+/*
+This is the legacy API and can still be used.  However some may find it useful to use MixpanelInstance instead, like
+```
+const mixpanel = new MixpanelInstance(TOKEN)
+await mixpanel.initialize()
+mixpanel.track('my event')
+```
+*/
 export default {
 
   sharedInstanceWithToken(apiToken: string): Promise<void> {
@@ -112,16 +126,33 @@ export default {
     return instance.initialize()
   },
 
-  getDistinctId(callback: (id: string) => void) {
+  /*
+  Gets the unique instance for a user.  If you want to use promises, use the MixpanelInstace class API instead.
+  */
+  getDistinctId(callback: (id: ?string) => void) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
-    defaultInstance.getDistinctId(callback) // callbacks have to come last but token is for a rare use case so they are switched when calling the native module
+    defaultInstance.getDistinctId()
+      .then((id: string) => {
+        callback(id)
+      })
+      .catch((err) => {
+        console.error('Error in mixpanel getDistinctId', err)
+        callback(null)
+      })
   },
 
   getSuperProperty(propertyName: string, callback: (value: mixed) => void) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
-    defaultInstance.getSuperProperty(propertyName, callback)
+    defaultInstance.getSuperProperty(propertyName)
+      .then((value: mixed) => {
+        callback(value)
+      })
+      .catch((err) => {
+        console.error('Error in mixpanel getSuperProperty', err)
+        callback(null)
+      })
   },
 
   track(event: string) {

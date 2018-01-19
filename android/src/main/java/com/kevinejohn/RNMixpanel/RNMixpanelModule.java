@@ -1,6 +1,5 @@
 package com.kevinejohn.RNMixpanel;
 
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -22,6 +21,8 @@ import java.util.Map;
 
 /**
  * Created by KevinEJohn on 2/11/16.
+ *
+ * Note that synchronized(instance) is used in methods because that's what MixpanelAPI.java recommends you do if you are keeping instances.
  */
 public class RNMixpanelModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
 
@@ -34,7 +35,10 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         reactContext.addLifecycleEventListener(this);
     }
 
-    private MixpanelAPI getInstace(final String apiToken) {
+    /*
+    Gets the mixpanel api instance for the given token.  It must have been created in sharedInstanceWithToken first.
+     */
+    private MixpanelAPI getInstance(final String apiToken) {
         return instances.get(apiToken);
     }
 
@@ -42,30 +46,6 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     public String getName() {
         return "RNMixpanel";
     }
-
-    @ReactMethod
-    public void sharedInstanceWithToken(final String token, Promise promise) {
-        synchronized (this) {
-            if (instances != null && instances.containsKey(token)) {
-                promise.resolve(null);
-                return;
-            }
-            final ReactApplicationContext reactApplicationContext = this.getReactApplicationContext();
-            if (reactApplicationContext == null) {
-                promise.reject(new Throwable("no React application context"));
-                return;
-            }
-            final MixpanelAPI instance = MixpanelAPI.getInstance(reactApplicationContext, token);
-            Map<String, MixpanelAPI> newInstances = new HashMap<>();
-            if (instances != null) {
-                instances.putAll(newInstances);
-            }
-            newInstances.put(token, instance);
-            instances = Collections.unmodifiableMap(newInstances);
-            promise.resolve(null);
-        }
-    }
-
 
     // Is there a better way to convert ReadableMap to JSONObject?
     // I only found this:
@@ -100,6 +80,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
         return jsonObject;
     }
+
     static JSONArray reactToJSON(ReadableArray readableArray) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for(int i=0; i < readableArray.size(); i++) {
@@ -130,8 +111,31 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
 
     @ReactMethod
+    public void sharedInstanceWithToken(final String token, Promise promise) {
+        synchronized (this) {
+            if (instances != null && instances.containsKey(token)) {
+                promise.resolve(null);
+                return;
+            }
+            final ReactApplicationContext reactApplicationContext = this.getReactApplicationContext();
+            if (reactApplicationContext == null) {
+                promise.reject(new Throwable("no React application context"));
+                return;
+            }
+            final MixpanelAPI instance = MixpanelAPI.getInstance(reactApplicationContext, token);
+            Map<String, MixpanelAPI> newInstances = new HashMap<>();
+            if (instances != null) {
+                instances.putAll(newInstances);
+            }
+            newInstances.put(token, instance);
+            instances = Collections.unmodifiableMap(newInstances);
+            promise.resolve(null);
+        }
+    }
+
+    @ReactMethod
     public void track(final String name, final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.track(name);
         }
@@ -146,7 +150,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
             e.printStackTrace();
         }
 
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.track(name, obj);
         }
@@ -155,7 +159,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @ReactMethod
     public void createAlias(final String old_id, final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.alias(old_id, instance.getDistinctId());
         }
@@ -163,7 +167,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @ReactMethod
     public void identify(final String user_id, final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.identify(user_id);
             instance.getPeople().identify(user_id);
@@ -172,7 +176,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @ReactMethod
     public void timeEvent(final String event, final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.timeEvent(event);
         }
@@ -186,7 +190,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.registerSuperProperties(obj);
         }
@@ -200,7 +204,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.registerSuperPropertiesOnce(obj);
         }
@@ -208,7 +212,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @ReactMethod
     public void initPushHandling (final String token, final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.getPeople().initPushHandling(token);
         }
@@ -225,7 +229,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
             e.printStackTrace();
         }
 
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.getPeople().set(obj);
         }
@@ -239,7 +243,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.getPeople().setOnce(obj);
         }
@@ -249,7 +253,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     // Android only
     @ReactMethod
     public void setPushRegistrationId(final String token, final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.getPeople().setPushRegistrationId(token);
         }
@@ -258,7 +262,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     // Android only
     @ReactMethod
     public void clearPushRegistrationId(final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.getPeople().clearPushRegistrationId();
         }
@@ -266,7 +270,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @ReactMethod
     public void trackCharge(final double charge, final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.getPeople().trackCharge(charge, null);
         }
@@ -280,7 +284,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.getPeople().trackCharge(charge, obj);
         }
@@ -288,7 +292,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @ReactMethod
     public void increment(final String property, final double count, final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.getPeople().increment(property, count);
         }
@@ -296,7 +300,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @ReactMethod
     public void reset(final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.reset();
             instance.flush();
@@ -305,7 +309,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @ReactMethod
     public void flush(final String apiToken) {
-        final MixpanelAPI instance = getInstace(apiToken);
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             instance.flush();
         }
@@ -335,27 +339,27 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
-    public void getSuperProperty(final String property, final String apiToken, Callback callback) {
-        String[] prop = new String[1];
-
-        final MixpanelAPI instance = getInstace(apiToken);
+    public void getSuperProperty(final String property, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
             try {
                 JSONObject currProps = instance.getSuperProperties();
-                prop[0] = currProps.getString(property);
-                callback.invoke(prop);
+                promise.resolve(currProps.getString(property));
             } catch (JSONException e) {
-                prop[0] = null;
-                callback.invoke(prop);
+                promise.reject(e);
             }
         }
     }
 
     @ReactMethod
-    public void getDistinctId(final String apiToken, Callback callback) {
-        final MixpanelAPI instance = getInstace(apiToken);
+    public void getDistinctId(final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        if (instance == null) {
+            promise.reject(new Throwable("no mixpanel instance available."));
+            return;
+        }
         synchronized(instance) {
-            callback.invoke(instance.getDistinctId());
+            promise.resolve(instance.getDistinctId());
         }
     }
 }
