@@ -16,34 +16,40 @@
 
 @implementation RNMixpanel
 
-Mixpanel *mixpanel = nil;
+Mixpanel *defaultInstance = nil;
 
-// Called by AppDelegate.m
-+ (void)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions {
-    mixpanel = [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions];
-}
+NSMutableDictionary *otherInstances = nil;
 
 // Expose this module to the React Native bridge
 RCT_EXPORT_MODULE(RNMixpanel)
 
 // sharedInstanceWithToken
-RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
-    mixpanel = [Mixpanel sharedInstanceWithToken:apiToken];
+RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken name:(NSString *)name) {
+    Mixpanel *instance = [Mixpanel sharedInstanceWithToken:apiToken];
+    if (name == nil) {
+        defaultInstance = instance;
+    } else {
+        if (otherInstances == nil) {
+            otherInstances = [NSMutableDictionary dictionaryWithCapacity:1]; // 1 is typical, any more and it can reallocate
+        }
+        [otherInstances setObject:instance forKey:name];
+    }
     // React Native runs too late to listen for applicationDidBecomeActive,
     // so we expose the private method and call it explicitly here,
     // to ensure that important things like initializing the flush timer and
     // checking for pending surveys and notifications.
-    [mixpanel applicationDidBecomeActive:nil];
+    [instance applicationDidBecomeActive:nil];
 }
 
+
 // get distinct id
-RCT_EXPORT_METHOD(getDistinctId:(RCTResponseSenderBlock)callback) {
-    callback(@[mixpanel.distinctId ?: @""]);
+RCT_EXPORT_METHOD(getDistinctId:(NSString *)instanceName callback:(RCTResponseSenderBlock)callback) {
+    callback(@[[self getInstance:instanceName].distinctId ?: @""]);
 }
 
 // get superProp
-RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop callback:(RCTResponseSenderBlock)callback) {
-    NSDictionary *currSuperProps = [mixpanel currentSuperProperties];
+RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop instanceName:(NSString *)instanceName callback:(RCTResponseSenderBlock)callback) {
+    NSDictionary *currSuperProps = [[self getInstance:instanceName] currentSuperProperties];
 
     if ([currSuperProps objectForKey:prop]) {
         NSString *superProp = currSuperProps[prop];
@@ -54,87 +60,87 @@ RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop callback:(RCTResponseSender
 }
 
 // track
-RCT_EXPORT_METHOD(track:(NSString *)event) {
-    [mixpanel track:event];
+RCT_EXPORT_METHOD(track:(NSString *)event instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName] track:event];
 }
 
 // track with properties
-RCT_EXPORT_METHOD(trackWithProperties:(NSString *)event properties:(NSDictionary *)properties) {
-    [mixpanel track:event properties:properties];
+RCT_EXPORT_METHOD(trackWithProperties:(NSString *)event properties:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName] track:event properties:properties];
 }
 
 // flush
-RCT_EXPORT_METHOD(flush) {
-    [mixpanel flush];
+RCT_EXPORT_METHOD(flush:(NSString *)instanceName) {
+    [[self getInstance:instanceName] flush];
 }
 
 // create Alias
-RCT_EXPORT_METHOD(createAlias:(NSString *)old_id) {
-    [mixpanel createAlias:old_id forDistinctID:mixpanel.distinctId];
+RCT_EXPORT_METHOD(createAlias:(NSString *)old_id instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName] createAlias:old_id forDistinctID:defaultInstance.distinctId];
 }
 
 // identify
-RCT_EXPORT_METHOD(identify:(NSString *) uniqueId) {
-    [mixpanel identify:uniqueId];
+RCT_EXPORT_METHOD(identify:(NSString *) uniqueId instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName] identify:uniqueId];
 }
 
 // Timing Events
-RCT_EXPORT_METHOD(timeEvent:(NSString *)event) {
-    [mixpanel timeEvent:event];
+RCT_EXPORT_METHOD(timeEvent:(NSString *)event instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName] timeEvent:event];
 }
 
 // Register super properties
-RCT_EXPORT_METHOD(registerSuperProperties:(NSDictionary *)properties) {
-    [mixpanel registerSuperProperties:properties];
+RCT_EXPORT_METHOD(registerSuperProperties:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName] registerSuperProperties:properties];
 }
 
 // Register super properties Once
-RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties) {
-    [mixpanel registerSuperPropertiesOnce:properties];
+RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName] registerSuperPropertiesOnce:properties];
 }
 
 // Init push notification
-RCT_EXPORT_METHOD(initPushHandling:(NSString *) token) {
-     [self addPushDeviceToken:token];
+RCT_EXPORT_METHOD(initPushHandling:(NSString *) token instanceName:(NSString *)instanceName) {
+     [self addPushDeviceToken:token instanceName:instanceName];
 }
 
 // Set People Data
-RCT_EXPORT_METHOD(set:(NSDictionary *)properties) {
-    [mixpanel.people set:properties];
+RCT_EXPORT_METHOD(set:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName].people set:properties];
 }
 
 // Set People Data Once
-RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties) {
-    [mixpanel.people setOnce: properties];
+RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName].people setOnce: properties];
 }
 
 // Remove Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken) {
-    [mixpanel.people removePushDeviceToken:deviceToken];
+RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName].people removePushDeviceToken:deviceToken];
 }
 
 // Remove Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(removeAllPushDeviceTokens) {
-    [mixpanel.people removeAllPushDeviceTokens];
+RCT_EXPORT_METHOD(removeAllPushDeviceTokens:(NSString *)instanceName) {
+    [[self getInstance:instanceName].people removeAllPushDeviceTokens];
 }
 
 // track Revenue
-RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge) {
-    [mixpanel.people trackCharge:charge];
+RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName].people trackCharge:charge];
 }
 
 // track with properties
-RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge properties:(NSDictionary *)properties) {
-    [mixpanel.people trackCharge:charge withProperties:properties];
+RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge properties:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName].people trackCharge:charge withProperties:properties];
 }
 
 // increment
-RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count) {
-    [mixpanel.people increment:property by:count];
+RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count instanceName:(NSString *)instanceName) {
+    [[self getInstance:instanceName].people increment:property by:count];
 }
 
 // Add Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken) {
+RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken instanceName:(NSString *)instanceName) {
     NSMutableData *deviceToken = [[NSMutableData alloc] init];
     unsigned char whole_byte;
     char byte_chars[3] = {'\0','\0','\0'};
@@ -145,14 +151,19 @@ RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken) {
         whole_byte = strtol(byte_chars, NULL, 16);
         [deviceToken appendBytes:&whole_byte length:1];
     }
-    [mixpanel.people addPushDeviceToken:deviceToken];
+    [[self getInstance:instanceName].people addPushDeviceToken:deviceToken];
 }
 
 // reset
-RCT_EXPORT_METHOD(reset) {
-    [mixpanel reset];
+RCT_EXPORT_METHOD(reset:(NSString *)instanceName) {
+    [[self getInstance:instanceName] reset];
     NSString *uuid = [[NSUUID UUID] UUIDString];
-    [mixpanel identify:uuid];
+    [[self getInstance:instanceName] identify:uuid];
+}
+
+-(Mixpanel*) getInstance: (NSString *)name {
+    if (name == nil) return defaultInstance;
+    return [otherInstances objectForKey:name]; // currently pay no regard to missing instances
 }
 
 @end
