@@ -16,40 +16,44 @@
 
 @implementation RNMixpanel
 
-Mixpanel *defaultInstance = nil;
+// to avoid having locks on every lookup, instances is kept in an immutable dictionary and reassigned when new instances are added
+NSDictionary *instances = nil;
 
-NSMutableDictionary *otherInstances = nil;
+-(Mixpanel*) getInstance: (NSString *)name {
+    return [instances objectForKey:name]; // currently no error is thrown if an instance is missing
+}
 
 // Expose this module to the React Native bridge
 RCT_EXPORT_MODULE(RNMixpanel)
 
 // sharedInstanceWithToken
-RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken name:(NSString *)name) {
-    Mixpanel *instance = [Mixpanel sharedInstanceWithToken:apiToken];
-    if (name == nil) {
-        defaultInstance = instance;
-    } else {
-        if (otherInstances == nil) {
-            otherInstances = [NSMutableDictionary dictionaryWithCapacity:1]; // 1 is typical, any more and it can reallocate
+RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    @synchronized(self) {
+        if (instances != nil && [instances objectForKey:apiToken] != nil) {
+            resolve(nil);
+            return;
         }
-        [otherInstances setObject:instance forKey:name];
+        Mixpanel *instance = [Mixpanel sharedInstanceWithToken:apiToken];
+        // copy instances and add the new instance.  then reassign instances
+        NSMutableDictionary *newInstances = [NSMutableDictionary dictionaryWithDictionary:instances];
+        [newInstances setObject:instance forKey:apiToken];
+        instances = [NSDictionary dictionaryWithDictionary:newInstances];
+        [instance applicationDidBecomeActive:nil];
+        resolve(nil);
     }
-    // React Native runs too late to listen for applicationDidBecomeActive,
-    // so we expose the private method and call it explicitly here,
-    // to ensure that important things like initializing the flush timer and
-    // checking for pending surveys and notifications.
-    [instance applicationDidBecomeActive:nil];
 }
 
 
 // get distinct id
-RCT_EXPORT_METHOD(getDistinctId:(NSString *)instanceName callback:(RCTResponseSenderBlock)callback) {
-    callback(@[[self getInstance:instanceName].distinctId ?: @""]);
+RCT_EXPORT_METHOD(getDistinctId:(NSString *)apiToken callback:(RCTResponseSenderBlock)callback) {
+    callback(@[[self getInstance:apiToken].distinctId ?: @""]);
 }
 
 // get superProp
-RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop instanceName:(NSString *)instanceName callback:(RCTResponseSenderBlock)callback) {
-    NSDictionary *currSuperProps = [[self getInstance:instanceName] currentSuperProperties];
+RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop apiToken:(NSString *)apiToken callback:(RCTResponseSenderBlock)callback) {
+    NSDictionary *currSuperProps = [[self getInstance:apiToken] currentSuperProperties];
 
     if ([currSuperProps objectForKey:prop]) {
         NSString *superProp = currSuperProps[prop];
@@ -60,87 +64,87 @@ RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop instanceName:(NSString *)in
 }
 
 // track
-RCT_EXPORT_METHOD(track:(NSString *)event instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName] track:event];
+RCT_EXPORT_METHOD(track:(NSString *)event apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken] track:event];
 }
 
 // track with properties
-RCT_EXPORT_METHOD(trackWithProperties:(NSString *)event properties:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName] track:event properties:properties];
+RCT_EXPORT_METHOD(trackWithProperties:(NSString *)event properties:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken] track:event properties:properties];
 }
 
 // flush
-RCT_EXPORT_METHOD(flush:(NSString *)instanceName) {
-    [[self getInstance:instanceName] flush];
+RCT_EXPORT_METHOD(flush:(NSString *)apiToken) {
+    [[self getInstance:apiToken] flush];
 }
 
 // create Alias
-RCT_EXPORT_METHOD(createAlias:(NSString *)old_id instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName] createAlias:old_id forDistinctID:defaultInstance.distinctId];
+RCT_EXPORT_METHOD(createAlias:(NSString *)old_id apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken] createAlias:old_id forDistinctID:[self getInstance:apiToken].distinctId];
 }
 
 // identify
-RCT_EXPORT_METHOD(identify:(NSString *) uniqueId instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName] identify:uniqueId];
+RCT_EXPORT_METHOD(identify:(NSString *) uniqueId apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken] identify:uniqueId];
 }
 
 // Timing Events
-RCT_EXPORT_METHOD(timeEvent:(NSString *)event instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName] timeEvent:event];
+RCT_EXPORT_METHOD(timeEvent:(NSString *)event apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken] timeEvent:event];
 }
 
 // Register super properties
-RCT_EXPORT_METHOD(registerSuperProperties:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName] registerSuperProperties:properties];
+RCT_EXPORT_METHOD(registerSuperProperties:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken] registerSuperProperties:properties];
 }
 
 // Register super properties Once
-RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName] registerSuperPropertiesOnce:properties];
+RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken] registerSuperPropertiesOnce:properties];
 }
 
 // Init push notification
-RCT_EXPORT_METHOD(initPushHandling:(NSString *) token instanceName:(NSString *)instanceName) {
-     [self addPushDeviceToken:token instanceName:instanceName];
+RCT_EXPORT_METHOD(initPushHandling:(NSString *) token apiToken:(NSString *)apiToken) {
+    [self addPushDeviceToken:token apiToken:apiToken];
 }
 
 // Set People Data
-RCT_EXPORT_METHOD(set:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName].people set:properties];
+RCT_EXPORT_METHOD(set:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken].people set:properties];
 }
 
 // Set People Data Once
-RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName].people setOnce: properties];
+RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken].people setOnce: properties];
 }
 
 // Remove Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName].people removePushDeviceToken:deviceToken];
+RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken].people removePushDeviceToken:deviceToken];
 }
 
 // Remove Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(removeAllPushDeviceTokens:(NSString *)instanceName) {
-    [[self getInstance:instanceName].people removeAllPushDeviceTokens];
+RCT_EXPORT_METHOD(removeAllPushDeviceTokens:(NSString *)apiToken) {
+    [[self getInstance:apiToken].people removeAllPushDeviceTokens];
 }
 
 // track Revenue
-RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName].people trackCharge:charge];
+RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken].people trackCharge:charge];
 }
 
 // track with properties
-RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge properties:(NSDictionary *)properties instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName].people trackCharge:charge withProperties:properties];
+RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge properties:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken].people trackCharge:charge withProperties:properties];
 }
 
 // increment
-RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count instanceName:(NSString *)instanceName) {
-    [[self getInstance:instanceName].people increment:property by:count];
+RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count apiToken:(NSString *)apiToken) {
+    [[self getInstance:apiToken].people increment:property by:count];
 }
 
 // Add Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken instanceName:(NSString *)instanceName) {
+RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken apiToken:(NSString *)apiToken) {
     NSMutableData *deviceToken = [[NSMutableData alloc] init];
     unsigned char whole_byte;
     char byte_chars[3] = {'\0','\0','\0'};
@@ -151,19 +155,14 @@ RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken instanceName:(N
         whole_byte = strtol(byte_chars, NULL, 16);
         [deviceToken appendBytes:&whole_byte length:1];
     }
-    [[self getInstance:instanceName].people addPushDeviceToken:deviceToken];
+    [[self getInstance:apiToken].people addPushDeviceToken:deviceToken];
 }
 
 // reset
-RCT_EXPORT_METHOD(reset:(NSString *)instanceName) {
-    [[self getInstance:instanceName] reset];
+RCT_EXPORT_METHOD(reset:(NSString *)apiToken) {
+    [[self getInstance:apiToken] reset];
     NSString *uuid = [[NSUUID UUID] UUIDString];
-    [[self getInstance:instanceName] identify:uuid];
-}
-
--(Mixpanel*) getInstance: (NSString *)name {
-    if (name == nil) return defaultInstance;
-    return [otherInstances objectForKey:name]; // currently pay no regard to missing instances
+    [[self getInstance:apiToken] identify:uuid];
 }
 
 @end
