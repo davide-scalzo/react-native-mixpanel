@@ -117,18 +117,6 @@ export class MixpanelInstance {
     RNMixpanel.setOnce(properties, this.apiToken)
   }
 
-  removePushDeviceToken(deviceToken: Object) {
-    if (!this.initialized) throw new Error(uninitializedError('removePushDeviceToken'))
-
-    RNMixpanel.removePushDeviceToken(deviceToken, this.apiToken)
-  }
-
-  removeAllPushDeviceTokens() {
-    if (!this.initialized) throw new Error(uninitializedError('removeAllPushDeviceTokens'))
-
-    RNMixpanel.removeAllPushDeviceTokens(this.apiToken)
-  }
-
   trackCharge(charge: number) {
     if (!this.initialized) throw new Error(uninitializedError('trackCharge'))
 
@@ -147,10 +135,38 @@ export class MixpanelInstance {
     RNMixpanel.increment(property, by, this.apiToken)
   }
 
+  removePushDeviceToken(deviceToken: Object) {
+    if (!this.initialized) throw new Error(uninitializedError('removePushDeviceToken'))
+
+    RNMixpanel.removePushDeviceToken(deviceToken, this.apiToken)
+  }
+
+  removeAllPushDeviceTokens() {
+    if (!this.initialized) throw new Error(uninitializedError('removeAllPushDeviceTokens'))
+
+    RNMixpanel.removeAllPushDeviceTokens(this.apiToken)
+  }
+
   addPushDeviceToken(token: string) {
     if (!this.initialized) throw new Error(uninitializedError('addPushDeviceToken'))
 
     RNMixpanel.addPushDeviceToken(token, this.apiToken)
+  }
+
+  // android only
+  setPushRegistrationId(token: string) {
+    if (!this.initialized) throw new Error(uninitializedError('setPushRegistrationId'))
+
+    if (!RNMixpanel.setPushRegistrationId) throw new Error('No native implementation for setPushRegistrationId.  This is Android only.')
+    RNMixpanel.setPushRegistrationId(token, this.apiToken)
+  }
+
+  // android only
+  clearPushRegistrationId() {
+    if (!this.initialized) throw new Error(uninitializedError('clearPushRegistrationId'))
+
+    if (!RNMixpanel.clearPushRegistrationId) throw new Error('No native implementation for setPusclearPushRegistrationIdhRegistrationId.  This is Android only.')
+    RNMixpanel.clearPushRegistrationId()
   }
 
   reset() {
@@ -307,9 +323,24 @@ export default {
     defaultInstance.addPushDeviceToken(token)
   },
 
+  // android only
+  setPushRegistrationId(token: string) {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.setPushRegistrationId(token)
+  },
+
+  // android only
+  clearPushRegistrationId() {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.clearPushRegistrationId()
+  },
+
   reset() {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
     defaultInstance.reset()
   },
+
 }
