@@ -4,13 +4,22 @@ import { NativeModules } from 'react-native'
 const { RNMixpanel } = NativeModules
 
 /*
+An error that is thrown or promise.rejected when a function is invoked before initialize() has completed.
+*/
+const NO_INSTANCE_ERROR = 'No mixpanel instance created yet.  You must call sharedInstanceWithToken(token) or MixPanelInstance.initialize(token) before anything else and should wait for its promise to fulfill before others calls to avoid any internal native issue.'
+const uninitializedError: (string) => Error = (method: string) => new Error(`Mixpanel instance was not initialized yet.  Please run initialize() and wait for its promise to resolve before calling ${method}(...)`)
+let defaultInstance:?MixpanelInstance = null
+
+/*
 A Mixpanel target.  Normally there is only one of these.  If you want to log to multiple Mixpanel projects, you can create a new instance of this class with a unique name.  Then call initiaze and you can start logging.
 */
 export class MixpanelInstance {
   apiToken: ?string
+  initialized: boolean
 
   constructor(apiToken: ?string) {
     this.apiToken = apiToken
+    this.initialized = false
   }
 
   /*
@@ -18,12 +27,18 @@ export class MixpanelInstance {
   */
   initialize(): Promise<void> {
     return RNMixpanel.sharedInstanceWithToken(this.apiToken)
+      .then(() => {
+        this.initialized = true
+      })
   }
 
   /*
   Gets the unique identifier for the current user.  Returns a promise that resolves with the value.
   */
   getDistinctId(): Promise<string> {
+    if (!this.initialized) {
+      return Promise.reject(new Error(uninitializedError('getDistinctId')))
+    }
     return RNMixpanel.getDistinctId(this.apiToken)
   }
 
@@ -31,10 +46,17 @@ export class MixpanelInstance {
   Gets the given super property.  Returns a promise that resolves to the value.
   */
   getSuperProperty(propertyName: string): Promise<mixed> {
+    if (!this.initialized) {
+      return Promise.reject(new Error(uninitializedError('getDistinctId')))
+    }
     return RNMixpanel.getSuperProperty(propertyName, this.apiToken)
   }
 
+  /*
+  Logs the event.
+  */
   track(event: string, properties?: Object) {
+    if (!this.initialized) throw new Error(uninitializedError('track'))
     if (properties) {
       RNMixpanel.trackWithProperties(event, properties, this.apiToken)
     } else {
@@ -43,75 +65,103 @@ export class MixpanelInstance {
   }
 
   flush() {
+    if (!this.initialized) throw new Error(uninitializedError('flush'))
     RNMixpanel.flush(this.apiToken)
   }
 
-  createAlias(alias: string) {
+  alias(alias: string) {
+    if (!this.initialized) throw new Error(uninitializedError('createAlias'))
+
     RNMixpanel.createAlias(alias, this.apiToken)
   }
 
   identify(userId: string) {
+    if (!this.initialized) throw new Error(uninitializedError('identify'))
+
     RNMixpanel.identify(userId, this.apiToken)
   }
 
   timeEvent(event: string) {
+    if (!this.initialized) throw new Error(uninitializedError('timeEvent'))
+
     RNMixpanel.timeEvent(event, this.apiToken)
   }
 
   registerSuperProperties(properties: Object) {
+    if (!this.initialized) throw new Error(uninitializedError('registerSuperProperties'))
+
     RNMixpanel.registerSuperProperties(properties, this.apiToken)
   }
 
   registerSuperPropertiesOnce(properties: Object) {
+    if (!this.initialized) throw new Error(uninitializedError('registerSuperPropertiesOnce'))
+
     RNMixpanel.registerSuperPropertiesOnce(properties, this.apiToken)
   }
 
   initPushHandling(token: string) {
+    if (!this.initialized) throw new Error(uninitializedError('initPushHandling'))
+
     RNMixpanel.initPushHandling(token, this.apiToken)
   }
 
   set(properties: Object) {
+    if (!this.initialized) throw new Error(uninitializedError('set'))
+
     RNMixpanel.set(properties, this.apiToken)
   }
 
   setOnce(properties: Object) {
+    if (!this.initialized) throw new Error(uninitializedError('setOnce'))
+
     RNMixpanel.setOnce(properties, this.apiToken)
   }
 
   removePushDeviceToken(deviceToken: Object) {
+    if (!this.initialized) throw new Error(uninitializedError('removePushDeviceToken'))
+
     RNMixpanel.removePushDeviceToken(deviceToken, this.apiToken)
   }
 
   removeAllPushDeviceTokens() {
+    if (!this.initialized) throw new Error(uninitializedError('removeAllPushDeviceTokens'))
+
     RNMixpanel.removeAllPushDeviceTokens(this.apiToken)
   }
 
   trackCharge(charge: number) {
+    if (!this.initialized) throw new Error(uninitializedError('trackCharge'))
+
     RNMixpanel.trackCharge(charge, this.apiToken)
   }
 
   trackChargeWithProperties(charge: number, properties: Object) {
+    if (!this.initialized) throw new Error(uninitializedError('trackChargeWithProperties'))
+
     RNMixpanel.trackChargeWithProperties(charge, properties, this.apiToken)
   }
 
   increment(property: string, by: number) {
+    if (!this.initialized) throw new Error(uninitializedError('increment'))
+
     RNMixpanel.increment(property, by, this.apiToken)
   }
 
   addPushDeviceToken(token: string) {
+    if (!this.initialized) throw new Error(uninitializedError('addPushDeviceToken'))
+
     RNMixpanel.addPushDeviceToken(token, this.apiToken)
   }
 
   reset() {
+    if (!this.initialized) throw new Error(uninitializedError('reset'))
+
     RNMixpanel.reset(this.apiToken)
   }
 }
 
-let defaultInstance:?MixpanelInstance = null
-const NO_INSTANCE_ERROR = 'No mixpanel instance created yet.  You must call sharedInstanceWithToken before anything else and should wait for its promise to fulfill before others calls to avoid any internal native issue.'
-
 /*
-This is the legacy API and can still be used.  However some may find it useful to use MixpanelInstance instead, like
+This is the original API and can still be used.  However some may find it useful to use MixpanelInstance instead, like
 ```
 const mixpanel = new MixpanelInstance(TOKEN)
 await mixpanel.initialize()
@@ -176,7 +226,7 @@ export default {
   createAlias(alias: string) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
-    defaultInstance.createAlias(alias)
+    defaultInstance.alias(alias)
   },
 
   identify(userId: string) {

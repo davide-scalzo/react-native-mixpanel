@@ -110,9 +110,28 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
 
+    @Override
+    public void onHostResume() {
+    }
+
+    @Override
+    public void onHostPause() {
+        for (MixpanelAPI instance : instances.values()) {
+            instance.flush();
+        }
+    }
+
+    @Override
+    public void onHostDestroy() {
+        for (MixpanelAPI instance : instances.values()) {
+            instance.flush();
+        }
+    }
+
     @ReactMethod
     public void sharedInstanceWithToken(final String token, Promise promise) {
         synchronized (this) {
+            // an instance can pre-exist when reloading javascript
             if (instances != null && instances.containsKey(token)) {
                 promise.resolve(null);
                 return;
@@ -218,8 +237,6 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
     }
 
-
-
     @ReactMethod
     public void set(final ReadableMap properties, final String apiToken) {
         JSONObject obj = null;
@@ -311,29 +328,6 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     public void flush(final String apiToken) {
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.flush();
-        }
-    }
-
-    @Override
-    public void onHostResume() {
-        // Actvity `onResume`
-    }
-
-    @Override
-    public void onHostPause() {
-        // Actvity `onPause`
-
-        for (MixpanelAPI instance : instances.values()) {
-            instance.flush();
-        }
-    }
-
-    @Override
-    public void onHostDestroy() {
-        // Actvity `onDestroy`
-
-        for (MixpanelAPI instance : instances.values()) {
             instance.flush();
         }
     }
