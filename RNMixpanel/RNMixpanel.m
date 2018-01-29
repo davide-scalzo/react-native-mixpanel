@@ -26,6 +26,13 @@ Mixpanel *mixpanel = nil;
 // Expose this module to the React Native bridge
 RCT_EXPORT_MODULE(RNMixpanel)
 
+// sharedInstance
+RCT_EXPORT_METHOD(sharedInstance) {
+    // if [Mixpanel sharedInstanceWithToken / initWithToken ...] have been
+    // called from AppDelegate already.
+    mixpanel = [Mixpanel sharedInstance];
+}
+
 // sharedInstanceWithToken
 RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken) {
     mixpanel = [Mixpanel sharedInstanceWithToken:apiToken];
