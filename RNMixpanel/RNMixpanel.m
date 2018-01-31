@@ -64,87 +64,155 @@ RCT_EXPORT_METHOD(getSuperProperty: (NSString *)prop
 }
 
 // track
-RCT_EXPORT_METHOD(track:(NSString *)event apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(track:(NSString *)event
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken] track:event];
+    resolve(nil);
 }
 
 // track with properties
-RCT_EXPORT_METHOD(trackWithProperties:(NSString *)event properties:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(trackWithProperties:(NSString *)event
+                  properties:(NSDictionary *)properties
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject
+                  ) {
     [[self getInstance:apiToken] track:event properties:properties];
+    resolve(nil);
 }
 
 // flush
-RCT_EXPORT_METHOD(flush:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(flush:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken] flush];
+    resolve(nil);;
 }
 
 // create Alias
-RCT_EXPORT_METHOD(createAlias:(NSString *)old_id apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(createAlias:(NSString *)old_id
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken] createAlias:old_id forDistinctID:[self getInstance:apiToken].distinctId];
+    resolve(nil);
 }
 
 // identify
-RCT_EXPORT_METHOD(identify:(NSString *) uniqueId apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(identify:(NSString *) uniqueId
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken] identify:uniqueId];
+    resolve(nil);
 }
 
 // Timing Events
-RCT_EXPORT_METHOD(timeEvent:(NSString *)event apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(timeEvent:(NSString *)event
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken] timeEvent:event];
+    resolve(nil);
 }
 
 // Register super properties
-RCT_EXPORT_METHOD(registerSuperProperties:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(registerSuperProperties:(NSDictionary *)properties
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken] registerSuperProperties:properties];
+    resolve(nil);
 }
 
 // Register super properties Once
-RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken] registerSuperPropertiesOnce:properties];
+    resolve(nil);
 }
 
 // Init push notification
-RCT_EXPORT_METHOD(initPushHandling:(NSString *) token apiToken:(NSString *)apiToken) {
-    [self addPushDeviceToken:token apiToken:apiToken];
+RCT_EXPORT_METHOD(initPushHandling:(NSString *) token
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    [self addPushDeviceToken:token apiToken:apiToken resolve:resolve reject:reject];
 }
 
 // Set People Data
-RCT_EXPORT_METHOD(set:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(set:(NSDictionary *)properties
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken].people set:properties];
+    resolve(nil);
 }
 
 // Set People Data Once
-RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(setOnce:(NSDictionary *)properties
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken].people setOnce: properties];
+    resolve(nil);
 }
 
 // Remove Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(removePushDeviceToken:(NSData *)deviceToken
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken].people removePushDeviceToken:deviceToken];
+    resolve(nil);
 }
 
 // Remove Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(removeAllPushDeviceTokens:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(removeAllPushDeviceTokens:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken].people removeAllPushDeviceTokens];
+    resolve(nil);
 }
 
 // track Revenue
-RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(trackCharge:(nonnull NSNumber *)charge
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken].people trackCharge:charge];
+    resolve(nil);
 }
 
 // track with properties
-RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge properties:(NSDictionary *)properties apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(trackChargeWithProperties:(nonnull NSNumber *)charge
+                  properties:(NSDictionary *)properties
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken].people trackCharge:charge withProperties:properties];
+    resolve(nil);
 }
 
 // increment
-RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(increment:(NSString *)property
+                  count:(nonnull NSNumber *)count
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken].people increment:property by:count];
+    resolve(nil);
 }
 
 // Add Person's Push Token (iOS-only)
-RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken apiToken:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     NSMutableData *deviceToken = [[NSMutableData alloc] init];
     unsigned char whole_byte;
     char byte_chars[3] = {'\0','\0','\0'};
@@ -156,14 +224,17 @@ RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken apiToken:(NSStr
         [deviceToken appendBytes:&whole_byte length:1];
     }
     [[self getInstance:apiToken].people addPushDeviceToken:deviceToken];
+    resolve(nil);
 }
 
 // reset
-RCT_EXPORT_METHOD(reset:(NSString *)apiToken) {
+RCT_EXPORT_METHOD(reset:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken] reset];
     NSString *uuid = [[NSUUID UUID] UUIDString];
     [[self getInstance:apiToken] identify:uuid];
+    resolve(nil);
 }
-
 
 @end

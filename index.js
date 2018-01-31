@@ -12,6 +12,8 @@ let defaultInstance:?MixpanelInstance = null
 
 /*
 A Mixpanel target.  Normally there is only one of these.  If you want to log to multiple Mixpanel projects, you can create a new instance of this class with a unique name.  Then call initiaze and you can start logging.
+Most of the functions, like track and alias return a Promise.  The functions will be called and normally you shouldn't have to care about awaiting them.
+However since React Native makes no guarantees about whether native methods are called in order, if you want to be 100% sure everything will work, like calling identify() before track(), you should await those promises to ensure everything is called properly.
 */
 export class MixpanelInstance {
   apiToken: ?string
@@ -55,124 +57,124 @@ export class MixpanelInstance {
   /*
   Logs the event.
   */
-  track(event: string, properties?: Object) {
+  track(event: string, properties?: Object): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('track'))
     if (properties) {
-      RNMixpanel.trackWithProperties(event, properties, this.apiToken)
+      return RNMixpanel.trackWithProperties(event, properties, this.apiToken)
     } else {
-      RNMixpanel.track(event, this.apiToken)
+      return RNMixpanel.track(event, this.apiToken)
     }
   }
 
-  flush() {
+  flush(): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('flush'))
-    RNMixpanel.flush(this.apiToken)
+    return RNMixpanel.flush(this.apiToken)
   }
 
-  alias(alias: string) {
+  alias(alias: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('createAlias'))
 
-    RNMixpanel.createAlias(alias, this.apiToken)
+    return RNMixpanel.createAlias(alias, this.apiToken)
   }
 
-  identify(userId: string) {
+  identify(userId: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('identify'))
 
-    RNMixpanel.identify(userId, this.apiToken)
+    return RNMixpanel.identify(userId, this.apiToken)
   }
 
-  timeEvent(event: string) {
+  timeEvent(event: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('timeEvent'))
 
-    RNMixpanel.timeEvent(event, this.apiToken)
+    return RNMixpanel.timeEvent(event, this.apiToken)
   }
 
-  registerSuperProperties(properties: Object) {
+  registerSuperProperties(properties: Object): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('registerSuperProperties'))
 
-    RNMixpanel.registerSuperProperties(properties, this.apiToken)
+    return RNMixpanel.registerSuperProperties(properties, this.apiToken)
   }
 
-  registerSuperPropertiesOnce(properties: Object) {
+  registerSuperPropertiesOnce(properties: Object): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('registerSuperPropertiesOnce'))
 
-    RNMixpanel.registerSuperPropertiesOnce(properties, this.apiToken)
+    return RNMixpanel.registerSuperPropertiesOnce(properties, this.apiToken)
   }
 
-  initPushHandling(token: string) {
+  initPushHandling(token: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('initPushHandling'))
 
-    RNMixpanel.initPushHandling(token, this.apiToken)
+    return RNMixpanel.initPushHandling(token, this.apiToken)
   }
 
-  set(properties: Object) {
+  set(properties: Object): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('set'))
 
-    RNMixpanel.set(properties, this.apiToken)
+    return RNMixpanel.set(properties, this.apiToken)
   }
 
-  setOnce(properties: Object) {
+  setOnce(properties: Object): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('setOnce'))
 
-    RNMixpanel.setOnce(properties, this.apiToken)
+    return RNMixpanel.setOnce(properties, this.apiToken)
   }
 
-  trackCharge(charge: number) {
+  trackCharge(charge: number): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('trackCharge'))
 
-    RNMixpanel.trackCharge(charge, this.apiToken)
+    return RNMixpanel.trackCharge(charge, this.apiToken)
   }
 
-  trackChargeWithProperties(charge: number, properties: Object) {
+  trackChargeWithProperties(charge: number, properties: Object): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('trackChargeWithProperties'))
 
-    RNMixpanel.trackChargeWithProperties(charge, properties, this.apiToken)
+    return RNMixpanel.trackChargeWithProperties(charge, properties, this.apiToken)
   }
 
-  increment(property: string, by: number) {
+  increment(property: string, by: number): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('increment'))
 
-    RNMixpanel.increment(property, by, this.apiToken)
+    return RNMixpanel.increment(property, by, this.apiToken)
   }
 
-  removePushDeviceToken(deviceToken: Object) {
+  removePushDeviceToken(deviceToken: Object): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('removePushDeviceToken'))
 
-    RNMixpanel.removePushDeviceToken(deviceToken, this.apiToken)
+    return RNMixpanel.removePushDeviceToken(deviceToken, this.apiToken)
   }
 
-  removeAllPushDeviceTokens() {
+  removeAllPushDeviceTokens(): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('removeAllPushDeviceTokens'))
 
-    RNMixpanel.removeAllPushDeviceTokens(this.apiToken)
+    return RNMixpanel.removeAllPushDeviceTokens(this.apiToken)
   }
 
-  addPushDeviceToken(token: string) {
+  addPushDeviceToken(token: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('addPushDeviceToken'))
 
-    RNMixpanel.addPushDeviceToken(token, this.apiToken)
+    return RNMixpanel.addPushDeviceToken(token, this.apiToken)
   }
 
   // android only
-  setPushRegistrationId(token: string) {
+  setPushRegistrationId(token: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('setPushRegistrationId'))
 
     if (!RNMixpanel.setPushRegistrationId) throw new Error('No native implementation for setPushRegistrationId.  This is Android only.')
-    RNMixpanel.setPushRegistrationId(token, this.apiToken)
+    return RNMixpanel.setPushRegistrationId(token, this.apiToken)
   }
 
   // android only
-  clearPushRegistrationId() {
+  clearPushRegistrationId(): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('clearPushRegistrationId'))
 
     if (!RNMixpanel.clearPushRegistrationId) throw new Error('No native implementation for setPusclearPushRegistrationIdhRegistrationId.  This is Android only.')
-    RNMixpanel.clearPushRegistrationId()
+    return RNMixpanel.clearPushRegistrationId()
   }
 
-  reset() {
+  reset(): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('reset'))
 
-    RNMixpanel.reset(this.apiToken)
+    return RNMixpanel.reset(this.apiToken)
   }
 }
 
