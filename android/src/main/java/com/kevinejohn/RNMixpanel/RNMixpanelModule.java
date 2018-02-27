@@ -38,6 +38,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     Gets the mixpanel api instance for the given token.  It must have been created in sharedInstanceWithToken first.
      */
     private MixpanelAPI getInstance(final String apiToken) {
+        if (instances == null) {
+            return null;
+        }
         return instances.get(apiToken);
     }
 
@@ -115,15 +118,19 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     @Override
     public void onHostPause() {
-        for (MixpanelAPI instance : instances.values()) {
-            instance.flush();
+        if (instances != null) {
+            for (MixpanelAPI instance : instances.values()) {
+                instance.flush();
+            }
         }
     }
 
     @Override
     public void onHostDestroy() {
-        for (MixpanelAPI instance : instances.values()) {
-            instance.flush();
+        if (instances != null) {
+            for (MixpanelAPI instance : instances.values()) {
+                instance.flush();
+            }
         }
     }
 
