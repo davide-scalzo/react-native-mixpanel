@@ -133,6 +133,18 @@ RCT_EXPORT_METHOD(increment:(NSString *)property count:(nonnull NSNumber *)count
     [mixpanel.people increment:property by:count];
 }
 
+// append
+RCT_EXPORT_METHOD(append:(NSString *)name properties:(NSArray *)properties) {
+	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys: properties ,name, nil];
+    [mixpanel.people append:dict];
+}
+
+// union
+RCT_EXPORT_METHOD(union:(NSString *)name properties:(NSArray *)properties) {
+	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys: properties ,name, nil];
+    [mixpanel.people union:dict];
+}
+
 // Add Person's Push Token (iOS-only)
 RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken) {
     NSMutableData *deviceToken = [[NSMutableData alloc] init];

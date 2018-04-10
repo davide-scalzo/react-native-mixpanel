@@ -229,6 +229,30 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
+    public void append(final String name, final ReadableArray properties) {
+        JSONArray obj = null;
+        try {
+            obj = RNMixpanelModule.reactToJSON(properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        mixpanel.getPeople().append(name, obj);
+    }
+
+    @ReactMethod
+    public void union(final String name, final ReadableArray properties) {
+        JSONArray obj = null;
+        try {
+            obj = RNMixpanelModule.reactToJSON(properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        mixpanel.getPeople().union(name, obj);
+    }
+
+    @ReactMethod
     public void reset() {
         mixpanel.reset();
         mixpanel.flush();
