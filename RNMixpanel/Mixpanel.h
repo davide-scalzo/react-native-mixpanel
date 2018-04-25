@@ -201,16 +201,30 @@
 
 /*!
  @property
- 
+
  @abstract
  If set, determines the background color of mini notifications.
 
  @discussion
- If this isn't set, we default to either the color of the UINavigationBar of the top 
- UINavigationController that is showing when the notification is presented, the 
+ If this isn't set, we default to either the color of the UINavigationBar of the top
+ UINavigationController that is showing when the notification is presented, the
  UINavigationBar default color for the app or the UITabBar default color.
  */
 @property (atomic) UIColor* miniNotificationBackgroundColor;
+
+/*!
+  @property
+
+  The minimum session duration (ms) that is tracked in automatic events.
+ */
+@property (atomic) UInt64 minimumSessionDuration;
+
+/*!
+  @property
+
+  The maximum session duration (ms) that is tracked in automatic events.
+ */
+@property (atomic) UInt64 maximumSessionDuration;
 
 /*!
  @property
@@ -556,10 +570,10 @@
 
 /*!
  @method
- 
+
  @abstract
  Calls flush, then optionally archives and calls a handler when finished.
- 
+
  @discussion
  When calling <code>flush</code> manually, it is sometimes important to verify
  that the flush has finished before further action is taken. This is
