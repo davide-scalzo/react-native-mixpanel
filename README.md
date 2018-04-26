@@ -1,3 +1,8 @@
+![npm](https://img.shields.io/npm/dt/react-native-mixpanel.svg?style=for-the-badge)
+
+![npm](https://img.shields.io/npm/dm/react-native-mixpanel.svg?style=for-the-badge)
+
+
 # Description
 React Native wrapper for Mixpanel library, on top of the regular javascript sdk you can normally use, this provides you all the goodies of the native wrapper including notifications, analysis of the operating system, surveys etc..
 
