@@ -1,6 +1,3 @@
-[![BCH compliance](https://bettercodehub.com/edge/badge/davodesign84/react-native-mixpanel?branch=master)](https://bettercodehub.com/)
-
-
 # Description
 React Native wrapper for Mixpanel library, on top of the regular javascript sdk you can normally use, this provides you all the goodies of the native wrapper including notifications, analysis of the operating system, surveys etc..
 
