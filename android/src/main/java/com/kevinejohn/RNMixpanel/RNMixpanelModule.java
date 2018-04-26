@@ -1,7 +1,7 @@
 package com.kevinejohn.RNMixpanel;
 
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -15,33 +15,39 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Created by KevinEJohn on 2/11/16.
+ * Mixpanel React Native module.
+ * Note that synchronized(instance) is used in methods because that's what MixpanelAPI.java recommends you do if you are keeping instances.
  */
 public class RNMixpanelModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
 
-    ReactApplicationContext reactContext;
-    MixpanelAPI mixpanel;
+    private Map<String, MixpanelAPI> instances;
 
     public RNMixpanelModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        this.reactContext = reactContext;
 
         // Get lifecycle notifications to flush mixpanel on pause or destroy
         reactContext.addLifecycleEventListener(this);
+    }
+
+    /*
+    Gets the mixpanel api instance for the given token.  It must have been created in sharedInstanceWithToken first.
+     */
+    private MixpanelAPI getInstance(final String apiToken) {
+        if (instances == null) {
+            return null;
+        }
+        return instances.get(apiToken);
     }
 
     @Override
     public String getName() {
         return "RNMixpanel";
     }
-
-    @ReactMethod
-    public void sharedInstanceWithToken(final String token) {
-        mixpanel = MixpanelAPI.getInstance(reactContext, token);
-
-    }
-
 
     // Is there a better way to convert ReadableMap to JSONObject?
     // I only found this:
@@ -76,6 +82,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
         return jsonObject;
     }
+
     static JSONArray reactToJSON(ReadableArray readableArray) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for(int i=0; i < readableArray.size(); i++) {
@@ -105,179 +112,271 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
 
-    @ReactMethod
-    public void track(final String name) {
-        mixpanel.track(name);
-    }
-
-    @ReactMethod
-    public void trackWithProperties(final String name, final ReadableMap properties) {
-        JSONObject obj = null;
-        try {
-            obj = RNMixpanelModule.reactToJSON(properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mixpanel.track(name, obj);
-    }
-
-    @ReactMethod
-    public void createAlias(final String old_id) {
-        mixpanel.alias(old_id, mixpanel.getDistinctId());
-    }
-
-    @ReactMethod
-    public void identify(final String user_id) {
-        mixpanel.identify(user_id);
-        mixpanel.getPeople().identify(user_id);
-    }
-
-    @ReactMethod
-    public void timeEvent(final String event) {
-        mixpanel.timeEvent(event);
-    }
-
-    @ReactMethod
-    public void registerSuperProperties(final ReadableMap properties) {
-        JSONObject obj = null;
-        try {
-            obj = RNMixpanelModule.reactToJSON(properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mixpanel.registerSuperProperties(obj);
-    }
-
-    @ReactMethod
-    public void registerSuperPropertiesOnce(final ReadableMap properties) {
-        JSONObject obj = null;
-        try {
-            obj = RNMixpanelModule.reactToJSON(properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mixpanel.registerSuperPropertiesOnce(obj);
-    }
-
-    @ReactMethod
-    public void initPushHandling (final String token) {
-        mixpanel.getPeople().initPushHandling(token);
-    }
-
-
-
-    @ReactMethod
-    public void set(final ReadableMap properties) {
-        JSONObject obj = null;
-        try {
-            obj = RNMixpanelModule.reactToJSON(properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mixpanel.getPeople().set(obj);
-    }
-
-    @ReactMethod
-    public void setOnce(final ReadableMap properties) {
-        JSONObject obj = null;
-        try {
-            obj = RNMixpanelModule.reactToJSON(properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mixpanel.getPeople().setOnce(obj);
-    }
-
-
-    // Android only
-    @ReactMethod
-    public void setPushRegistrationId(final String token) {
-        mixpanel.getPeople().setPushRegistrationId(token);
-    }
-
-    // Android only
-    @ReactMethod
-    public void clearPushRegistrationId() {
-        mixpanel.getPeople().clearPushRegistrationId();
-    }
-
-    @ReactMethod
-    public void trackCharge(final double charge) {
-        mixpanel.getPeople().trackCharge(charge, null);
-    }
-
-    @ReactMethod
-    public void trackChargeWithProperties(final double charge, final ReadableMap properties) {
-        JSONObject obj = null;
-        try {
-            obj = RNMixpanelModule.reactToJSON(properties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mixpanel.getPeople().trackCharge(charge, obj);
-    }
-
-    @ReactMethod
-    public void increment(final String property, final double count) {
-        mixpanel.getPeople().increment(property, count);
-    }
-
-    @ReactMethod
-    public void reset() {
-        mixpanel.reset();
-        mixpanel.flush();
-    }
-
-    @ReactMethod
-    public void flush() {
-        mixpanel.flush();
-    }
-
     @Override
     public void onHostResume() {
-        // Actvity `onResume`
     }
 
     @Override
     public void onHostPause() {
-        // Actvity `onPause`
-
-        if (mixpanel != null) {
-            mixpanel.flush();
+        if (instances != null) {
+            for (MixpanelAPI instance : instances.values()) {
+                instance.flush();
+            }
         }
     }
 
     @Override
     public void onHostDestroy() {
-        // Actvity `onDestroy`
-
-        if (mixpanel != null) {
-            mixpanel.flush();
+        if (instances != null) {
+            for (MixpanelAPI instance : instances.values()) {
+                instance.flush();
+            }
         }
     }
 
     @ReactMethod
-    public void getSuperProperty(final String property, Callback callback) {
-        String[] prop = new String[1];
+    public void sharedInstanceWithToken(final String token, Promise promise) {
+        synchronized (this) {
+            // an instance can pre-exist when reloading javascript
+            if (instances != null && instances.containsKey(token)) {
+                promise.resolve(null);
+                return;
+            }
+            final ReactApplicationContext reactApplicationContext = this.getReactApplicationContext();
+            if (reactApplicationContext == null) {
+                promise.reject(new Throwable("no React application context"));
+                return;
+            }
+            final MixpanelAPI instance = MixpanelAPI.getInstance(reactApplicationContext, token);
+            Map<String, MixpanelAPI> newInstances = new HashMap<>();
+            if (instances != null) {
+                newInstances.putAll(instances);
+            }
+            newInstances.put(token, instance);
+            instances = Collections.unmodifiableMap(newInstances);
+            promise.resolve(null);
+        }
+    }
 
+    @ReactMethod
+    public void track(final String name, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.track(name);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void trackWithProperties(final String name, final ReadableMap properties, final String apiToken, Promise promise) {
+        JSONObject obj = null;
         try {
-            JSONObject currProps = mixpanel.getSuperProperties();
-            prop[0] = currProps.getString(property);
-            callback.invoke(prop);
+            obj = RNMixpanelModule.reactToJSON(properties);
         } catch (JSONException e) {
-            prop[0] = null;
-            callback.invoke(prop);
+            e.printStackTrace();
+        }
+
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.track(name, obj);
+        }
+        promise.resolve(null);
+    }
+
+
+    @ReactMethod
+    public void createAlias(final String old_id, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.alias(old_id, instance.getDistinctId());
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void identify(final String user_id, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.identify(user_id);
+            instance.getPeople().identify(user_id);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void timeEvent(final String event, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.timeEvent(event);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void registerSuperProperties(final ReadableMap properties, final String apiToken, Promise promise) {
+        JSONObject obj = null;
+        try {
+            obj = RNMixpanelModule.reactToJSON(properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.registerSuperProperties(obj);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void registerSuperPropertiesOnce(final ReadableMap properties, final String apiToken, Promise promise) {
+        JSONObject obj = null;
+        try {
+            obj = RNMixpanelModule.reactToJSON(properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.registerSuperPropertiesOnce(obj);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void initPushHandling (final String token, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.getPeople().initPushHandling(token);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void set(final ReadableMap properties, final String apiToken, Promise promise) {
+        JSONObject obj = null;
+        try {
+            obj = RNMixpanelModule.reactToJSON(properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.getPeople().set(obj);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void setOnce(final ReadableMap properties, final String apiToken, Promise promise) {
+        JSONObject obj = null;
+        try {
+            obj = RNMixpanelModule.reactToJSON(properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.getPeople().setOnce(obj);
+        }
+        promise.resolve(null);
+    }
+
+
+    // Android only
+    @ReactMethod
+    public void setPushRegistrationId(final String token, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.getPeople().setPushRegistrationId(token);
+        }
+        promise.resolve(null);
+    }
+
+    // Android only
+    @ReactMethod
+    public void clearPushRegistrationId(final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.getPeople().clearPushRegistrationId();
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void trackCharge(final double charge, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.getPeople().trackCharge(charge, null);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void trackChargeWithProperties(final double charge, final ReadableMap properties, final String apiToken, Promise promise) {
+        JSONObject obj = null;
+        try {
+            obj = RNMixpanelModule.reactToJSON(properties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.getPeople().trackCharge(charge, obj);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void increment(final String property, final double count, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.getPeople().increment(property, count);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void reset(final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.reset();
+            instance.flush();
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void flush(final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.flush();
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void getSuperProperty(final String property, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            try {
+                JSONObject currProps = instance.getSuperProperties();
+                promise.resolve(currProps.getString(property));
+            } catch (JSONException e) {
+                promise.reject(e);
+            }
         }
     }
 
     @ReactMethod
-    public void getDistinctId(Callback callback) {
-        callback.invoke(mixpanel.getDistinctId());
+    public void getDistinctId(final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        if (instance == null) {
+            promise.reject(new Throwable("no mixpanel instance available."));
+            return;
+        }
+        synchronized(instance) {
+            promise.resolve(instance.getDistinctId());
+        }
     }
 }
