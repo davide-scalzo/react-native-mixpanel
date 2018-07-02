@@ -246,6 +246,12 @@ export default {
     defaultInstance.flush()
   },
 
+  disableIpAddressGeolocalization() {
+      if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+      defaultInstance.disableIpAddressGeolocalization()
+  },
+
   createAlias(alias: string) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
