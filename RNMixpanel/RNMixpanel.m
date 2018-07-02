@@ -77,7 +77,7 @@ RCT_EXPORT_METHOD(disableIpAddressGeolocalization:(NSString *)apiToken
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
     [self getInstance:apiToken].useIPAddressForGeoLocation = NO;
-    resolve(nil);;
+    resolve(nil);
 }
 
 // track with properties
