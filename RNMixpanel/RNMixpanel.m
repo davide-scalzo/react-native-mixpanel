@@ -228,7 +228,7 @@ RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken
 }
 
 // People union
-RCT_EXPORT_METHOD((NSString *)name
+RCT_EXPORT_METHOD(union:(NSString *)name
                   properties:(NSArray *)properties
                   apiToken:(NSString *)apiToken
                   resolve:(RCTPromiseResolveBlock)resolve
