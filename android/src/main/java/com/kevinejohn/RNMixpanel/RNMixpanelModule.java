@@ -337,8 +337,8 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
-    public void union(final ReadableMap properties, final String apiToken, Promise promise) {
-        JSONObject obj = null;
+    public void union(final String name, final ReadableArray properties, final String apiToken, Promise promise) {
+        JSONArray obj = null;
         try {
             obj = RNMixpanelModule.reactToJSON(properties);
         } catch (JSONException e) {
@@ -346,7 +346,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.getPeople().union(obj);
+            instance.getPeople().union(name, obj);
         }
         promise.resolve(null);
     }

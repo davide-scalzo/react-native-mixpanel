@@ -228,10 +228,12 @@ RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken
 }
 
 // People union
-RCT_EXPORT_METHOD(union:(NSDictionary *)dict
+RCT_EXPORT_METHOD((NSString *)name
+                  properties:(NSArray *)properties
                   apiToken:(NSString *)apiToken
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys: properties, name, nil];
     [[self getInstance:apiToken].people union:dict];
     resolve(nil);
 }
