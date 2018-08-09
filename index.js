@@ -71,6 +71,11 @@ export class MixpanelInstance {
     return RNMixpanel.flush(this.apiToken)
   }
 
+  disableIpAddressGeolocalization(): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('disableIpAddressGeolocalization'))
+    return RNMixpanel.disableIpAddressGeolocalization(this.apiToken)
+  }
+
   alias(alias: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('createAlias'))
 
@@ -239,6 +244,12 @@ export default {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
     defaultInstance.flush()
+  },
+
+  disableIpAddressGeolocalization() {
+      if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+      defaultInstance.disableIpAddressGeolocalization()
   },
 
   createAlias(alias: string) {

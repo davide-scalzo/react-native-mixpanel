@@ -86,6 +86,14 @@ RCT_EXPORT_METHOD(track:(NSString *)event
     resolve(nil);
 }
 
+// disable ip address geolocalization
+RCT_EXPORT_METHOD(disableIpAddressGeolocalization:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    [self getInstance:apiToken].useIPAddressForGeoLocation = NO;
+    resolve(nil);
+}
+
 // track with properties
 RCT_EXPORT_METHOD(trackWithProperties:(NSString *)event
                   properties:(NSDictionary *)properties
