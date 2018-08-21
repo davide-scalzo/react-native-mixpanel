@@ -52,7 +52,7 @@ RCT_EXPORT_METHOD(setAppSessionPropertiesIOS:(NSDictionary *)properties) {
     if ([properties objectForKey:@"minimumSessionDuration"]) {
         NSNumber *minimumSessionDuration = properties[@"minimumSessionDuration"];
         long long int intValue = [minimumSessionDuration longLongValue];
-        [Mixpanel sharedInstance].maximumSessionDuration = intValue;
+        [Mixpanel sharedInstance].minimumSessionDuration = intValue;
     }
 
     if ([properties objectForKey:@"maximumSessionDuration"]) {
