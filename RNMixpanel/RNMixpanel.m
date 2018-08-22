@@ -47,17 +47,18 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
 }
 
 // setAppSessionProperties iOS
+// setAppSessionProperties iOS
 RCT_EXPORT_METHOD(setAppSessionPropertiesIOS:(NSDictionary *)properties) {
     if ([properties objectForKey:@"minimumSessionDuration"]) {
         NSNumber *minimumSessionDuration = properties[@"minimumSessionDuration"];
         long long int intValue = [minimumSessionDuration longLongValue];
-        mixpanel.minimumSessionDuration = intValue;
+        [Mixpanel sharedInstance].minimumSessionDuration = intValue;
     }
 
     if ([properties objectForKey:@"maximumSessionDuration"]) {
         NSNumber *maximumSessionDuration = properties[@"maximumSessionDuration"];
         long long int intValue = [maximumSessionDuration longLongValue];
-        mixpanel.maximumSessionDuration = intValue;
+        [Mixpanel sharedInstance].maximumSessionDuration = intValue;
     }
 }
 
