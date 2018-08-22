@@ -250,6 +250,17 @@ RCT_EXPORT_METHOD(addPushDeviceToken:(NSString *)pushDeviceToken
     resolve(nil);
 }
 
+// People union
+RCT_EXPORT_METHOD(union:(NSString *)name
+                  properties:(NSArray *)properties
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys: properties, name, nil];
+    [[self getInstance:apiToken].people union:dict];
+    resolve(nil);
+}
+
 // reset
 RCT_EXPORT_METHOD(reset:(NSString *)apiToken
                   resolve:(RCTPromiseResolveBlock)resolve

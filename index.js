@@ -142,6 +142,12 @@ export class MixpanelInstance {
     return RNMixpanel.increment(property, by, this.apiToken)
   }
 
+  union(name: string, properties: any[]): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('union'))
+
+    return RNMixpanel.union(name, properties, this.apiToken)
+  }
+
   removePushDeviceToken(deviceToken: Object): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('removePushDeviceToken'))
 
@@ -328,6 +334,12 @@ export default {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
     defaultInstance.increment(property, by)
+  },
+
+  union(name: string, properties: any[]) {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.union(name, properties)
   },
 
   addPushDeviceToken(token: string) {
