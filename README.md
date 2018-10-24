@@ -86,16 +86,16 @@ Mixpanel.track("Event name");
 //Track event with properties
 Mixpanel.trackWithProperties('Click Button', {button_type: 'yellow button', button_text: 'magic button'});
 
-//Create Alias from unique id
+//Create Alias from unique id, i.e. create a new mixpanel profile: to call when a user signs up, with a unique id that is not used by another mixpanel profile as param
 Mixpanel.createAlias(UNIQUE_ID)
 
-//Identify
+//Identify, i.e. associate to an existing mixpanel profile: to call when a user logs in and is already registered in Mixpanel with this unique id
 Mixpanel.identify(UNIQUE_ID)
 
-//Set People properties
+//Set People properties (warning: if no mixpanel profile has been assigned to the current user when this method is called, it will automatically create a new mixpanel profile and the user will no longer be anonymous in Mixpanel)
 Mixpanel.set({"$email": "elvis@email.com"});
 
-//Set People Properties Once
+//Set People Properties Once (warning: if no mixpanel profile has been assigned to the current user when this method is called, it will automatically create a new mixpanel profile and the user will no longer be anonymous in Mixpanel)
 Mixpanel.setOnce({"$email": "elvis@email.com", "Created": new Date().toISOString()});
 
 // Timing Events
@@ -133,7 +133,7 @@ Mixpanel.clearPushRegistrationId();
 // iOS
 Mixpanel.addPushDeviceToken("APNS push token")
 
-// Mixpanel reset method
+// Mixpanel reset method (warning: it will also generate a new unique id and call the identify method with it. Thus, the user will not be anonymous in Mixpanel.)
 Mixpanel.reset();
 
 // get the last distinct id set with identify or, if identify hasn't been
