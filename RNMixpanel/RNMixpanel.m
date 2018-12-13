@@ -159,6 +159,13 @@ RCT_EXPORT_METHOD(registerSuperPropertiesOnce:(NSDictionary *)properties
     resolve(nil);
 }
 
+RCT_EXPORT_METHOD(clearSuperProperties:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    [[self getInstance:apiToken] clearSuperProperties];
+    resolve(nil);
+}
+
 // Init push notification
 RCT_EXPORT_METHOD(initPushHandling:(NSString *) token
                   apiToken:(NSString *)apiToken
