@@ -24,10 +24,10 @@ export class MixpanelInstance {
   optOutTrackingByDefault: boolean
   constructor(apiToken: ?string, launchOptions?: Object, trackCrashes?: boolean, automaticPushTracking?: boolean, optOutTrackingByDefault?: boolean) {
     this.apiToken = apiToken
-    this.launchOptions = launchOptions === undefined || null
-    this.trackCrashes = trackCrashes === undefined || true
-    this.automaticPushTracking = automaticPushTracking === undefined || true
-    this.optOutTrackingByDefault = optOutTrackingByDefault === undefined || false
+    this.launchOptions = launchOptions === undefined ? null : launchOptions
+    this.trackCrashes = trackCrashes === undefined ? true : trackCrashes
+    this.automaticPushTracking = automaticPushTracking === undefined ? true : automaticPushTracking
+    this.optOutTrackingByDefault = optOutTrackingByDefault === undefined ? false : optOutTrackingByDefault
     this.initialized = false
   }
 
