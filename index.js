@@ -27,7 +27,7 @@ export class MixpanelInstance {
     this.launchOptions = launchOptions === undefined || null
     this.trackCrashes = trackCrashes === undefined || true
     this.automaticPushTracking = automaticPushTracking === undefined || true
-    this.optOutTrackingByDefault = optOutTrackingByDefault === undefined || true
+    this.optOutTrackingByDefault = optOutTrackingByDefault === undefined || false
     this.initialized = false
   }
 
@@ -206,8 +206,8 @@ mixpanel.track('my event')
 */
 export default {
 
-  sharedInstanceWithToken(apiToken: string): Promise<void> {
-    const instance = new MixpanelInstance(apiToken)
+  sharedInstanceWithToken(apiToken: string, launchOptions?: Object, trackCrashes?: boolean, automaticPushTracking?: boolean, optOutTrackingByDefault?: boolean): Promise<void> {
+    const instance = new MixpanelInstance(apiToken,launchOptions,trackCrashes,automaticPushTracking,optOutTrackingByDefault)
     if (!defaultInstance) defaultInstance = instance
     return instance.initialize()
   },
