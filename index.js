@@ -1,6 +1,6 @@
 // @flow
 'use strict'
-import { NativeModules } from 'react-native'
+import { NativeModules,Platform } from 'react-native'
 const { RNMixpanel } = NativeModules
 
 /*
@@ -35,10 +35,17 @@ export class MixpanelInstance {
   Initializes the instance in native land.  Returns a promise that resolves when the instance has been created and is ready for use.
   */
   initialize(): Promise<void> {
-    return RNMixpanel.sharedInstanceWithToken(this.apiToken, this.launchOptions, this.trackCrashes, this.automaticPushTracking, this.optOutTrackingByDefault)
+    if (Platform.OS === 'ios'){
+      return RNMixpanel.sharedInstanceWithToken(this.apiToken, this.launchOptions, this.trackCrashes, this.automaticPushTracking, this.optOutTrackingByDefault)
       .then(() => {
         this.initialized = true
       })
+    }else {
+      return RNMixpanel.sharedInstanceWithToken(this.apiToken)
+      .then(() => {
+        this.initialized = true
+      })
+    }
   }
 
   /*
