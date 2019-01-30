@@ -46,6 +46,33 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
     }
 }
 
+// sharedInstanceWithToken
+RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken 
+                  launchOptions:(nullable NSDictionary *)launchOptions
+                  trackCrashes:(BOOL)trackCrashes
+                  automaticPushTracking:(BOOL)automaticPushTracking
+                  optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    @synchronized(self) {
+        if (instances != nil && [instances objectForKey:apiToken] != nil) {
+            resolve(nil);
+            return;
+        }
+        Mixpanel *instance = [Mixpanel sharedInstanceWithToken:apiToken
+                                                 launchOptions:launchOptions
+                                                  trackCrashes:trackCrashes
+                                         automaticPushTracking:automaticPushTracking
+                                       optOutTrackingByDefault:optOutTrackingByDefault];
+        // copy instances and add the new instance.  then reassign instances
+        NSMutableDictionary *newInstances = [NSMutableDictionary dictionaryWithDictionary:instances];
+        [newInstances setObject:instance forKey:apiToken];
+        instances = [NSDictionary dictionaryWithDictionary:newInstances];
+        [instance applicationDidBecomeActive:nil];
+        resolve(nil);
+    }
+}
+
 // setAppSessionProperties iOS
 // setAppSessionProperties iOS
 RCT_EXPORT_METHOD(setAppSessionPropertiesIOS:(NSDictionary *)properties) {

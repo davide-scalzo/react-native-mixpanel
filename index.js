@@ -18,9 +18,16 @@ However since React Native makes no guarantees about whether native methods are 
 export class MixpanelInstance {
   apiToken: ?string
   initialized: boolean
-
-  constructor(apiToken: ?string) {
+  launchOptions: object
+  trackCrashes: boolean
+  automaticPushTracking: boolean
+  optOutTrackingByDefault: boolean
+  constructor(apiToken: ?string, launchOptions?: Object, trackCrashes?: boolean, automaticPushTracking?: boolean, optOutTrackingByDefault?: boolean) {
     this.apiToken = apiToken
+    this.launchOptions = launchOptions === undefined || null
+    this.trackCrashes = trackCrashes === undefined || true
+    this.automaticPushTracking = automaticPushTracking === undefined || true
+    this.optOutTrackingByDefault = optOutTrackingByDefault === undefined || true
     this.initialized = false
   }
 
@@ -28,7 +35,7 @@ export class MixpanelInstance {
   Initializes the instance in native land.  Returns a promise that resolves when the instance has been created and is ready for use.
   */
   initialize(): Promise<void> {
-    return RNMixpanel.sharedInstanceWithToken(this.apiToken)
+    return RNMixpanel.sharedInstanceWithToken(this.apiToken, this.launchOptions, this.trackCrashes, this.automaticPushTracking, this.optOutTrackingByDefault)
       .then(() => {
         this.initialized = true
       })

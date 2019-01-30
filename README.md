@@ -80,6 +80,13 @@ var Mixpanel = require('react-native-mixpanel');
 //Init Mixpanel SDK with your project token
 Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN);
 
+//Init Mixpanel SDK with your project token
+//launchOptions default value is nil
+//trackCrashes default value is true
+//automaticPushTracking default value is true
+//optOutTrackingByDefault default value is true
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN,launchOptions,trackCrashes,automaticPushTracking,optOutTrackingByDefault);
+
 //Send and event name with no properties
 Mixpanel.track("Event name");
 
