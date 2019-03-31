@@ -10,12 +10,12 @@ android {
         versionCode 1
         versionName "1.0"
         ndk {
-            abiFilters "armeabi-v7a", "x86"
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
-    compile "com.mixpanel.android:mixpanel-android:5.3.0"
+    implementation 'com.facebook.react:react-native:+'
+    api "com.mixpanel.android:mixpanel-android:5.6.0"
 }
