@@ -138,6 +138,8 @@ Mixpanel.initPushHandling(YOUR_12_DIGIT_GOOGLE_SENDER_ID);
 Mixpabel.clearSuperProperties();
 
 // Unregister an android device for push notifications [Android only]
+// With token it will clear a single Firebase Cloud Messaging token from Mixpanel.
+// Without token it will clear all current Firebase Cloud Messaging tokens from Mixpanel.
 Mixpanel.clearPushRegistrationId(token?: string); 
 
 // iOS
