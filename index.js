@@ -51,7 +51,8 @@ export class MixpanelInstance {
     if (!this.initialized) {
       return Promise.reject(new Error(uninitializedError('getDistinctId')))
     }
-    return RNMixpanel.getDistinctId(this.apiToken)
+    if (!RNMixpanel.getPushRegistrationId) throw new Error('No native implementation for getPushRegistrationId.  This is Android only.')
+    return RNMixpanel.getPushRegistrationId(this.apiToken)
   }
 
   /*
