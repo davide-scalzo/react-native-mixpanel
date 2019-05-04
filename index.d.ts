@@ -29,6 +29,9 @@ declare module 'react-native-mixpanel' {
     getPushRegistrationId(): Promise<string>
 
     // iOS only
+    removePushDeviceToken(pushDeviceToken: string): Promise<void>
+    removeAllPushDeviceTokens(): Promise<void>
+    addPushDeviceToken(token: string): Promise<void>
   }
 
   interface MixpanelAPI {

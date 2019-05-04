@@ -188,6 +188,10 @@ Mixpanel.addPushDeviceToken("APNS push token");
 // iOS - unregister iOS device, pushDeviceToken = APNS push token
 Mixpanel.removePushDeviceToken(pushDeviceToken: string); 
 
+// iOS
+// Unregister the given device to receive push notifications.
+Mixpanel.removeAllPushDeviceTokens();
+
 // Mixpanel reset method (warning: it will also generate a new unique id and call the identify method with it. Thus, the user will not be anonymous in Mixpanel.)
 Mixpanel.reset();
 
