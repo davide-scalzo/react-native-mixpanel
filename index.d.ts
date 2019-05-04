@@ -23,6 +23,7 @@ declare module 'react-native-mixpanel' {
     removePushDeviceToken(deviceToken: Object): Promise<void>
     removeAllPushDeviceTokens(): Promise<void>
     addPushDeviceToken(token: string): Promise<void>
+    clearSuperProperties(): Promise<void>
 
     // android only
     setPushRegistrationId(token: string): Promise<void>
