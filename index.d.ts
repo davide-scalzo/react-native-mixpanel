@@ -58,12 +58,13 @@ declare module 'react-native-mixpanel' {
     increment(property: string, by: number): void;
     union(name: string, properties: any[]): void;
     addPushDeviceToken(token: string): void;
+    clearSuperProperties(): void;
   
     // android only
     setPushRegistrationId(token: string): void;
   
     // android only
-    clearPushRegistrationId(): void;
+    clearPushRegistrationId(token?: string): void;
 
     reset(): void;
   }
