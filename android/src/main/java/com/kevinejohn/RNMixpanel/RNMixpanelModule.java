@@ -304,10 +304,14 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
     // Android only
     @ReactMethod
-    public void clearPushRegistrationId(final String apiToken, Promise promise) {
+    public void clearPushRegistrationId(final String token, final String apiToken, Promise promise) {
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.getPeople().clearPushRegistrationId();
+            if (token != null) {
+                instance.getPeople().clearPushRegistrationId(token);
+            } else {
+                instance.getPeople().clearPushRegistrationId();
+            }
         }
         promise.resolve(null);
     }

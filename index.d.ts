@@ -29,7 +29,8 @@ declare module 'react-native-mixpanel' {
     setPushRegistrationId(token: string): Promise<void>
   
     // android only
-    clearPushRegistrationId(): Promise<void>
+    clearPushRegistrationId(token?: string): Promise<void>
+    
 
     reset(): Promise<void>
   }
