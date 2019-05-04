@@ -291,6 +291,18 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         promise.resolve(null);
     }
 
+    // Android only
+    @ReactMethod
+    public void getPushRegistrationId(final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        if (instance == null) {
+            promise.reject(new Throwable("no mixpanel instance available."));
+            return;
+        }
+        synchronized(instance) {
+            promise.resolve(instance.getPeople().getPushRegistrationId());
+        }
+    }
 
     // Android only
     @ReactMethod

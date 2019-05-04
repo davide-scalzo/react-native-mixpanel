@@ -126,18 +126,58 @@ Mixpanel.trackChargeWithProperties(399, {"product": "ACME Wearable tech"});
 // increment property
 Mixpanel.increment("Login Count", 1);
 
+// Android
+// Retrieves current Firebase Cloud Messaging token.
+Mixpanel.getPushRegistrationId();
+
 // send push notifications token to Mixpanel
 // Android
 Mixpanel.setPushRegistrationId("GCM/FCM push token");
 
-//tell Mixpanel which user record in People Analytics should receive the messages when they are sent from the Mixpanel app,
-//make sure you call this right after you call `identify`
+// Android
+// tell Mixpanel which user record in People Analytics should receive the messages when they are sent from the Mixpanel app,
+// make sure you call this right after you call `identify`
+// Deprecated. 
+// in 5.5.0. Google Cloud Messaging (GCM) is now deprecated by Google. To enable end-to-end Firebase Cloud Messaging (FCM) from Mixpanel you only need to add the following to your application manifest XML file:
+
+ 
+//  <service
+//        android:name="com.mixpanel.android.mpmetrics.MixpanelFCMMessagingService"
+//        android:enabled="true"
+//        android:exported="false">
+//        <intent-filter>
+//            <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+//        </intent-filter>
+//  </service>
+ 
+ 
+
+// Make sure you have a valid google-services.json file in your project and firebase messaging is included as a dependency. Example:
+
+ 
+//  buildscript {
+//       ...
+//       dependencies {
+//           classpath 'com.google.gms:google-services:4.1.0'
+//           ...
+//       }
+//  }
+
+//  dependencies {
+//      implementation 'com.google.firebase:firebase-messaging:17.3.4'
+//      implementation 'com.mixpanel.android:mixpanel-android:5.5.0'
+//  }
+
+//  apply plugin: 'com.google.gms.google-services'
+
+// We recommend you update your Server Key on mixpanel.com from your Firebase console. Legacy server keys are still supported.
 Mixpanel.initPushHandling(YOUR_12_DIGIT_GOOGLE_SENDER_ID);
 
 // Allows to clear super properites
 Mixpabel.clearSuperProperties();
 
-// Unregister an android device for push notifications [Android only]
+// Android
+// Unregister an android device for push notifications
 // With token it will clear a single Firebase Cloud Messaging token from Mixpanel.
 // Without token it will clear all current Firebase Cloud Messaging tokens from Mixpanel.
 Mixpanel.clearPushRegistrationId(token?: string); 

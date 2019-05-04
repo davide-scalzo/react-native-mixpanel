@@ -20,19 +20,15 @@ declare module 'react-native-mixpanel' {
     trackChargeWithProperties(charge: number, properties: Object): Promise<void>
     increment(property: string, by: number): Promise<void>
     union(name: string, properties: any[]): Promise<void>
-    removePushDeviceToken(pushDeviceToken: string): Promise<void>
-    removeAllPushDeviceTokens(): Promise<void>
-    addPushDeviceToken(token: string): Promise<void>
     clearSuperProperties(): Promise<void>
+    reset(): Promise<void>
 
     // android only
     setPushRegistrationId(token: string): Promise<void>
-  
-    // android only
     clearPushRegistrationId(token?: string): Promise<void>
-    
+    getPushRegistrationId(): Promise<string>
 
-    reset(): Promise<void>
+    // iOS only
   }
 
   interface MixpanelAPI {
@@ -51,22 +47,21 @@ declare module 'react-native-mixpanel' {
     initPushHandling(token: string): void;
     set(properties: Object): void;
     setOnce(properties: Object): void;
-    removePushDeviceToken(pushDeviceToken: string): void;
-    removeAllPushDeviceTokens(): void;
     trackCharge(charge: number): void;
     trackChargeWithProperties(charge: number, properties: Object): void;
     increment(property: string, by: number): void;
     union(name: string, properties: any[]): void;
-    addPushDeviceToken(token: string): void;
     clearSuperProperties(): void;
+    reset(): void;
   
     // android only
     setPushRegistrationId(token: string): void;
-  
-    // android only
     clearPushRegistrationId(token?: string): void;
 
-    reset(): void;
+    // iOS only
+    addPushDeviceToken(token: string): void;
+    removePushDeviceToken(pushDeviceToken: string): void;
+    removeAllPushDeviceTokens(): void;
   }
 
   const mixpanelApi: MixpanelAPI;
