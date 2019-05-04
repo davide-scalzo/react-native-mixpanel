@@ -134,11 +134,17 @@ Mixpanel.setPushRegistrationId("GCM/FCM push token");
 //make sure you call this right after you call `identify`
 Mixpanel.initPushHandling(YOUR_12_DIGIT_GOOGLE_SENDER_ID);
 
-//unregister a device for push notifications
-Mixpanel.clearPushRegistrationId();
+// Allows to clear super properites
+Mixpabel.clearSuperProperties();
+
+// Unregister an android device for push notifications [Android only]
+Mixpanel.clearPushRegistrationId(token?: string); 
 
 // iOS
-Mixpanel.addPushDeviceToken("APNS push token")
+Mixpanel.addPushDeviceToken("APNS push token");
+
+// iOS - unregister iOS device, pushDeviceToken = APNS push token
+Mixpanel.removePushDeviceToken(pushDeviceToken: string); 
 
 // Mixpanel reset method (warning: it will also generate a new unique id and call the identify method with it. Thus, the user will not be anonymous in Mixpanel.)
 Mixpanel.reset();
