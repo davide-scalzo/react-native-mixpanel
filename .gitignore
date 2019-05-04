@@ -34,3 +34,5 @@ local.properties
 #
 node_modules/
 npm-debug.log
+*.prefs
+android/.project
