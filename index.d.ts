@@ -20,7 +20,7 @@ declare module 'react-native-mixpanel' {
     trackChargeWithProperties(charge: number, properties: Object): Promise<void>
     increment(property: string, by: number): Promise<void>
     union(name: string, properties: any[]): Promise<void>
-    removePushDeviceToken(deviceToken: Object): Promise<void>
+    removePushDeviceToken(pushDeviceToken: string): Promise<void>
     removeAllPushDeviceTokens(): Promise<void>
     addPushDeviceToken(token: string): Promise<void>
     clearSuperProperties(): Promise<void>
@@ -51,7 +51,7 @@ declare module 'react-native-mixpanel' {
     initPushHandling(token: string): void;
     set(properties: Object): void;
     setOnce(properties: Object): void;
-    removePushDeviceToken(deviceToken: Object): void;
+    removePushDeviceToken(pushDeviceToken: string): void;
     removeAllPushDeviceTokens(): void;
     trackCharge(charge: number): void;
     trackChargeWithProperties(charge: number, properties: Object): void;
