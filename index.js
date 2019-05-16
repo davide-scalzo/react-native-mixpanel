@@ -49,7 +49,7 @@ export class MixpanelInstance {
   */
  getPushRegistrationId(): Promise<string> {
     if (!this.initialized) {
-      return Promise.reject(new Error(uninitializedError('getDistinctId')))
+      return Promise.reject(new Error(uninitializedError('getPushRegistrationId')))
     }
     if (!RNMixpanel.getPushRegistrationId) throw new Error('No native implementation for getPushRegistrationId.  This is Android only.')
     return RNMixpanel.getPushRegistrationId(this.apiToken)
@@ -60,7 +60,7 @@ export class MixpanelInstance {
   */
   getSuperProperty(propertyName: string): Promise<mixed> {
     if (!this.initialized) {
-      return Promise.reject(new Error(uninitializedError('getDistinctId')))
+      return Promise.reject(new Error(uninitializedError('getSuperProperty')))
     }
     return RNMixpanel.getSuperProperty(propertyName, this.apiToken)
   }
@@ -240,15 +240,15 @@ export default {
   /*
   Retrieves current Firebase Cloud Messaging token.
   */
-  getPushRegistrationId(callback: (id: ?string) => void) {
+  getPushRegistrationId(callback: (token: ?string) => void) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
     defaultInstance.getPushRegistrationId()
-      .then((id: string) => {
-        callback(id)
+      .then((token: string) => {
+        callback(token)
       })
       .catch((err) => {
-        console.error('Error in mixpanel getDistinctId', err)
+        console.error('Error in mixpanel getPushRegistrationId', err)
         callback(null)
       })
   },

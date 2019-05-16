@@ -3,13 +3,13 @@ declare module 'react-native-mixpanel' {
     constructor(apiToken?: string)
 
     initialize(): Promise<void>
-    getDistinctId(): Promise<string>  
+    getDistinctId(): Promise<string>
     getSuperProperty(propertyName: string): Promise<any>
     track(event: string, properties?: Object): Promise<void>
     flush(): Promise<void>
     disableIpAddressGeolocalization(): Promise<void>
     alias(alias: string): Promise<void>
-    identify(userId: string): Promise<void>  
+    identify(userId: string): Promise<void>
     timeEvent(event: string): Promise<void>
     registerSuperProperties(properties: Object): Promise<void>
     registerSuperPropertiesOnce(properties: Object): Promise<void>
@@ -56,11 +56,11 @@ declare module 'react-native-mixpanel' {
     union(name: string, properties: any[]): void;
     clearSuperProperties(): void;
     reset(): void;
-  
+
     // android only
     setPushRegistrationId(token: string): void;
     clearPushRegistrationId(token?: string): void;
-    getPushRegistrationId(): Promise<string>;
+    getPushRegistrationId(callback: (token?: string) => void): void;
 
     // iOS only
     addPushDeviceToken(token: string): void;
@@ -70,5 +70,5 @@ declare module 'react-native-mixpanel' {
 
   const mixpanelApi: MixpanelAPI;
   export default mixpanelApi;
-  
+
 }
