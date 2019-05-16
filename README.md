@@ -128,6 +128,7 @@ Mixpanel.increment("Login Count", 1);
 
 // Android
 // Retrieves current Firebase Cloud Messaging token.
+// Should only be called after identify(String) has been called.
 Mixpanel.getPushRegistrationId();
 
 // send push notifications token to Mixpanel
