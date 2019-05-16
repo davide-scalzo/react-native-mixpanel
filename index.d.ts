@@ -60,6 +60,7 @@ declare module 'react-native-mixpanel' {
     // android only
     setPushRegistrationId(token: string): void;
     clearPushRegistrationId(token?: string): void;
+    getPushRegistrationId(): Promise<string>;
 
     // iOS only
     addPushDeviceToken(token: string): void;
