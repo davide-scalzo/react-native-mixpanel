@@ -45,11 +45,22 @@ export class MixpanelInstance {
   }
 
   /*
+  Retrieves current Firebase Cloud Messaging token.
+  */
+ getPushRegistrationId(): Promise<string> {
+    if (!this.initialized) {
+      return Promise.reject(new Error(uninitializedError('getPushRegistrationId')))
+    }
+    if (!RNMixpanel.getPushRegistrationId) throw new Error('No native implementation for getPushRegistrationId.  This is Android only.')
+    return RNMixpanel.getPushRegistrationId(this.apiToken)
+  }
+
+  /*
   Gets the given super property.  Returns a promise that resolves to the value.
   */
   getSuperProperty(propertyName: string): Promise<mixed> {
     if (!this.initialized) {
-      return Promise.reject(new Error(uninitializedError('getDistinctId')))
+      return Promise.reject(new Error(uninitializedError('getSuperProperty')))
     }
     return RNMixpanel.getSuperProperty(propertyName, this.apiToken)
   }
@@ -153,10 +164,10 @@ export class MixpanelInstance {
     return RNMixpanel.union(name, properties, this.apiToken)
   }
 
-  removePushDeviceToken(deviceToken: Object): Promise<void> {
+  removePushDeviceToken(pushDeviceToken: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('removePushDeviceToken'))
 
-    return RNMixpanel.removePushDeviceToken(deviceToken, this.apiToken)
+    return RNMixpanel.removePushDeviceToken(pushDeviceToken, this.apiToken)
   }
 
   removeAllPushDeviceTokens(): Promise<void> {
@@ -180,11 +191,11 @@ export class MixpanelInstance {
   }
 
   // android only
-  clearPushRegistrationId(): Promise<void> {
+  clearPushRegistrationId(token?: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('clearPushRegistrationId'))
 
     if (!RNMixpanel.clearPushRegistrationId) throw new Error('No native implementation for setPusclearPushRegistrationIdhRegistrationId.  This is Android only.')
-    return RNMixpanel.clearPushRegistrationId()
+    return RNMixpanel.clearPushRegistrationId(token, this.apiToken)
   }
 
   reset(): Promise<void> {
@@ -222,6 +233,22 @@ export default {
       })
       .catch((err) => {
         console.error('Error in mixpanel getDistinctId', err)
+        callback(null)
+      })
+  },
+
+  /*
+  Retrieves current Firebase Cloud Messaging token.
+  */
+  getPushRegistrationId(callback: (token: ?string) => void) {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.getPushRegistrationId()
+      .then((token: string) => {
+        callback(token)
+      })
+      .catch((err) => {
+        console.error('Error in mixpanel getPushRegistrationId', err)
         callback(null)
       })
   },
@@ -317,10 +344,10 @@ export default {
     defaultInstance.setOnce(properties)
   },
 
-  removePushDeviceToken(deviceToken: Object) {
+  removePushDeviceToken(pushDeviceToken: string) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
-    defaultInstance.removePushDeviceToken(deviceToken)
+    defaultInstance.removePushDeviceToken(pushDeviceToken)
   },
 
   removeAllPushDeviceTokens() {
@@ -367,10 +394,10 @@ export default {
   },
 
   // android only
-  clearPushRegistrationId() {
+  clearPushRegistrationId(token?: string) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
-    defaultInstance.clearPushRegistrationId()
+    defaultInstance.clearPushRegistrationId(token)
   },
 
   reset() {
