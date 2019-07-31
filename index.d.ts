@@ -23,6 +23,7 @@ declare module 'react-native-mixpanel' {
     removePushDeviceToken(deviceToken: Object): Promise<void>
     removeAllPushDeviceTokens(): Promise<void>
     addPushDeviceToken(token: string): Promise<void>
+    showInAppMessageIfAvailable(): Promise<void>
 
     // android only
     setPushRegistrationId(token: string): Promise<void>
@@ -56,6 +57,7 @@ declare module 'react-native-mixpanel' {
     increment(property: string, by: number): void;
     union(name: string, properties: any[]): void;
     addPushDeviceToken(token: string): void;
+    showInAppMessageIfAvailable(): void;
   
     // android only
     setPushRegistrationId(token: string): void;

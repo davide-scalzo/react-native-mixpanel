@@ -278,4 +278,12 @@ RCT_EXPORT_METHOD(reset:(NSString *)apiToken
     resolve(nil);
 }
 
+// showNotification
+RCT_EXPORT_METHOD(showNotification:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    [[self getInstance:apiToken] showNotification];
+    resolve(nil);
+}
+
 @end

@@ -148,5 +148,31 @@ Mixpanel.reset();
 Mixpanel.getDistinctId(function(id){})
 ```
 
+## Displaying in-app messages ##
+
+By default, in-app messages are shown to users when the app starts and a message is available to display
+This behaviour can be disabled by default, and explicitally triggered at a later time (e.g. after your loading sequence)
+
+For iOS, in your app delegate, add the following line:
+
+```
+// In application:didFinishLaunchingWithOptions:
+Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:YOUR_MIXPANEL_TOKEN];
+// Turn this off so the message doesn't pop up automatically.
+mixpanel.showNotificationOnActive = NO;
+```
+
+For Android, add the following to your app mainifest in the `<application>` tag:
+
+```
+<meta-data android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates" android:value="false" />
+```
+
+You can then call the following in your react native application:
+
+```
+Mixpanel.showInAppMessageIfAvailable();
+```
+
 ## Notes ##
 For more info please have a look at the [official Mixpanel reference](https://mixpanel.com/help/reference/ios) for iOS
