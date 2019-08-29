@@ -184,7 +184,7 @@ export class MixpanelInstance {
     if (!this.initialized) throw new Error(uninitializedError('clearPushRegistrationId'))
 
     if (!RNMixpanel.clearPushRegistrationId) throw new Error('No native implementation for setPusclearPushRegistrationIdhRegistrationId.  This is Android only.')
-    return RNMixpanel.clearPushRegistrationId(this.apiToken, token)
+    return RNMixpanel.clearPushRegistrationId(this.apiToken, token || null)
   }
 
   reset(): Promise<void> {
@@ -367,10 +367,10 @@ export default {
   },
 
   // android only
-  clearPushRegistrationId() {
+  clearPushRegistrationId(token?: string) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
-    defaultInstance.clearPushRegistrationId()
+    defaultInstance.clearPushRegistrationId(token || null)
   },
 
   reset() {
