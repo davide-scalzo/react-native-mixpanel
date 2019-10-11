@@ -1,15 +1,17 @@
 declare module 'react-native-mixpanel' {
   export class MixpanelInstance {
-    constructor(apiToken?: string)
+    constructor(apiToken?: string, optOutTrackingDefault?: boolean)
 
     initialize(): Promise<void>
-    getDistinctId(): Promise<string>  
+    getDistinctId(): Promise<string>
     getSuperProperty(propertyName: string): Promise<any>
     track(event: string, properties?: Object): Promise<void>
     flush(): Promise<void>
+    optInTracking(): Promise<void>
+    optOutTracking(): Promise<void>
     disableIpAddressGeolocalization(): Promise<void>
     alias(alias: string): Promise<void>
-    identify(userId: string): Promise<void>  
+    identify(userId: string): Promise<void>
     timeEvent(event: string): Promise<void>
     registerSuperProperties(properties: Object): Promise<void>
     registerSuperPropertiesOnce(properties: Object): Promise<void>
@@ -26,7 +28,7 @@ declare module 'react-native-mixpanel' {
 
     // android only
     setPushRegistrationId(token: string): Promise<void>
-  
+
     // android only
     clearPushRegistrationId(): Promise<void>
 
@@ -34,12 +36,14 @@ declare module 'react-native-mixpanel' {
   }
 
   interface MixpanelAPI {
-    sharedInstanceWithToken(apiToken: string): Promise<void>;
+    sharedInstanceWithToken(apiToken: string, optOutTrackingDefault?: boolean): Promise<void>;
     getDistinctId(callback: (id?: string) => void): void;
     getSuperProperty(propertyName: string, callback: (value: any) => void): void;
     track(event: string): void;
     trackWithProperties(event: string, properties: Object): void;
     flush(): void;
+    optInTracking(): void
+    optOutTracking(): void
     disableIpAddressGeolocalization(): void;
     createAlias(alias: string): void;
     identify(userId: string): void;
@@ -56,10 +60,10 @@ declare module 'react-native-mixpanel' {
     increment(property: string, by: number): void;
     union(name: string, properties: any[]): void;
     addPushDeviceToken(token: string): void;
-  
+
     // android only
     setPushRegistrationId(token: string): void;
-  
+
     // android only
     clearPushRegistrationId(): void;
 
@@ -68,5 +72,5 @@ declare module 'react-native-mixpanel' {
 
   const mixpanelApi: MixpanelAPI;
   export default mixpanelApi;
-  
+
 }
