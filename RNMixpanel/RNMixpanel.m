@@ -29,6 +29,7 @@ RCT_EXPORT_MODULE(RNMixpanel)
 
 // sharedInstanceWithToken
 RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
+                  optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
     @synchronized(self) {
@@ -36,7 +37,10 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
             resolve(nil);
             return;
         }
-        Mixpanel *instance = [Mixpanel sharedInstanceWithToken:apiToken];
+
+        Mixpanel *instance = [Mixpanel sharedInstanceWithToken:apiToken
+                                       optOutTrackingByDefault:optOutTrackingByDefault];
+
         // copy instances and add the new instance.  then reassign instances
         NSMutableDictionary *newInstances = [NSMutableDictionary dictionaryWithDictionary:instances];
         [newInstances setObject:instance forKey:apiToken];
@@ -111,6 +115,21 @@ RCT_EXPORT_METHOD(flush:(NSString *)apiToken
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
     [[self getInstance:apiToken] flush];
+    resolve(nil);;
+}
+
+// Opt in/out tracking
+RCT_EXPORT_METHOD(optOutTracking:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    [[self getInstance:apiToken] optOutTracking];
+    resolve(nil);;
+}
+
+RCT_EXPORT_METHOD(optInTracking:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    [[self getInstance:apiToken] optInTracking];
     resolve(nil);;
 }
 
