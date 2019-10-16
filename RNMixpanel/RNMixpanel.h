@@ -10,6 +10,8 @@
 
 @interface RNMixpanel : NSObject<RCTBridgeModule>
 
-+ (RNMixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions;
++ (RNMixpanel *)sharedInstanceWithToken:(NSString *)apiToken
+                optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
+                          launchOptions:(NSDictionary *)launchOptions;
 
 @end
