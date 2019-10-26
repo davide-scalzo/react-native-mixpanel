@@ -81,11 +81,27 @@ public class MainActivity extends ReactActivity {
 # Usage
 
 ```js
-//Require the module
+// Require the module
 var Mixpanel = require('react-native-mixpanel');
 
-//Init Mixpanel SDK with your project token
+// Init Mixpanel SDK with your project token
+//  @param apiToken - your project token
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (false by default)
 Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN);
+
+// You can also opt out tracking by default (GDPR)
+//  @param apiToken - your project token
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, true);
+
+// Opt in tracking.
+// Use this method to opt in an already opted out user from tracking. People updates and track calls will be sent to Mixpanel after using this method.
+Mixpanel.optInTracking();
+
+//  Opt out tracking.
+
+//  This method is used to opt out tracking. This causes all events and people request no longer to be sent back to the Mixpanel server.
+Mixpanel.optOutTracking();
 
 //Send and event name with no properties
 Mixpanel.track("Event name");
