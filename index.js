@@ -17,10 +17,12 @@ However since React Native makes no guarantees about whether native methods are 
 */
 export class MixpanelInstance {
   apiToken: ?string
+  optOutTrackingDefault: boolean
   initialized: boolean
 
-  constructor(apiToken: ?string) {
+  constructor(apiToken: ?string, optOutTrackingDefault: ?boolean = false) {
     this.apiToken = apiToken
+    this.optOutTrackingDefault = optOutTrackingDefault
     this.initialized = false
   }
 
@@ -28,7 +30,7 @@ export class MixpanelInstance {
   Initializes the instance in native land.  Returns a promise that resolves when the instance has been created and is ready for use.
   */
   initialize(): Promise<void> {
-    return RNMixpanel.sharedInstanceWithToken(this.apiToken)
+    return RNMixpanel.sharedInstanceWithToken(this.apiToken, this.optOutTrackingDefault)
       .then(() => {
         this.initialized = true
       })
@@ -219,6 +221,16 @@ export class MixpanelInstance {
         return RNMixpanel.showNotification(this.apiToken)
     }
   }
+
+  optInTracking(): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('optInTracking'))
+    return RNMixpanel.optInTracking(this.apiToken)
+  }
+
+  optOutTracking(): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('optOutTracking'))
+    return RNMixpanel.optOutTracking(this.apiToken)
+  }
 }
 
 /*
@@ -231,8 +243,8 @@ mixpanel.track('my event')
 */
 export default {
 
-  sharedInstanceWithToken(apiToken: string): Promise<void> {
-    const instance = new MixpanelInstance(apiToken)
+  sharedInstanceWithToken(apiToken: string, optOutTrackingDefault: ?boolean = false): Promise<void> {
+    const instance = new MixpanelInstance(apiToken, optOutTrackingDefault)
     if (!defaultInstance) defaultInstance = instance
     return instance.initialize()
   },
@@ -433,4 +445,15 @@ export default {
     defaultInstance.showInAppMessageIfAvailable(token)
   },
 
+  optInTracking() {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.optInTracking()
+  },
+
+  optOutTracking() {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.optOutTracking()
+  },
 }
