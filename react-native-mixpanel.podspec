@@ -1,14 +1,18 @@
+require 'json'
+
+package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
+
 Pod::Spec.new do |s|
-  s.name             = "react-native-mixpanel"
-  s.version          = "0.0.6"
-  s.summary          = "React Native wrapper for Mixpanel tracking"
+  s.name         = package['name']
+  s.version      = package['version']
+  s.summary      = package['description']
+  s.license      = package['license']
   s.requires_arc = true
-  s.author       = { 'Davide Scalzo' => 'davidescalzo@gmail.com' }
-  s.license      = 'MIT'
-  s.homepage     = 'n/a'
+  s.authors      = package['author']
+  s.homepage     = package['homepage']
   s.source       = { :git => "https://github.com/davodesign84/react-native-mixpanel.git" }
   s.source_files = 'RNMixpanel/*'
-  s.platform     = :ios, "7.0"
-  s.dependency 'Mixpanel', '~> 3.4.7'
+  s.platform     = :ios, "8.0"
+  s.dependency 'Mixpanel', '~> 3.5.0'
   s.dependency 'React'
 end
