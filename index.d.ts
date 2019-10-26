@@ -20,6 +20,7 @@ declare module 'react-native-mixpanel' {
     trackChargeWithProperties(charge: number, properties: Object): Promise<void>
     increment(property: string, by: number): Promise<void>
     union(name: string, properties: any[]): Promise<void>
+    append(name: string, properties: any[]): Promise<void>
     clearSuperProperties(): Promise<void>
     reset(): Promise<void>
 
@@ -54,6 +55,7 @@ declare module 'react-native-mixpanel' {
     trackChargeWithProperties(charge: number, properties: Object): void;
     increment(property: string, by: number): void;
     union(name: string, properties: any[]): void;
+    append(name: string, properties: any[]): void;
     clearSuperProperties(): void;
     reset(): void;
 

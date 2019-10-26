@@ -280,6 +280,17 @@ RCT_EXPORT_METHOD(union:(NSString *)name
     resolve(nil);
 }
 
+// People append
+RCT_EXPORT_METHOD(append:(NSString *)name
+                  properties:(NSArray *)properties
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys: properties, name, nil];
+    [[self getInstance:apiToken].people append:dict];
+    resolve(nil);
+}
+
 // reset
 RCT_EXPORT_METHOD(reset:(NSString *)apiToken
                   resolve:(RCTPromiseResolveBlock)resolve

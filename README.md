@@ -126,6 +126,12 @@ Mixpanel.trackChargeWithProperties(399, {"product": "ACME Wearable tech"});
 // increment property
 Mixpanel.increment("Login Count", 1);
 
+// Append array to a list property
+Mixpanel.append("Lines", ["Simple", "Dashed"]);
+
+// Merge array to a list property, excluding duplicate values
+Mixpanel.union("Lines", ["Dashed", "Custom"]);
+
 // Android
 // Retrieves current Firebase Cloud Messaging token.
 // Should only be called after identify(String) has been called.
