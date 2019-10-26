@@ -24,6 +24,10 @@ From version 1.1.2 module uses Mixpanel SDK >= 5.6.0 that requires FCM
 - Allow sub-classes to override push notifications payload and Support when more than one push provider is used [more info here](https://github.com/mixpanel/mixpanel-android/releases/tag/v5.5.1)
 
 
+# Autolinking and RN >= 0.60
+
+Autolinking should work out of the box.
+
 # Manual Installation
 
 ## Installation iOS ##
