@@ -209,6 +209,16 @@ export class MixpanelInstance {
 
     return RNMixpanel.reset(this.apiToken)
   }
+
+  showInAppMessageIfAvailable(): Promise<void> {
+    if (!this.initialized) throw uninitializedError('showNotificationIfAvailable')
+
+    if (Platform.OS === "android") {
+        return RNMixpanel.showNotificationIfAvailable(this.apiToken)
+    } else {
+        return RNMixpanel.showNotification(this.apiToken)
+    }
+  }
 }
 
 /*
@@ -416,6 +426,11 @@ export default {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
     defaultInstance.reset()
+  },
+
+  showInAppMessageIfAvailable() {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+    defaultInstance.showInAppMessageIfAvailable(token)
   },
 
 }

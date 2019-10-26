@@ -434,4 +434,13 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
             promise.resolve(instance.getDistinctId());
         }
     }
+
+    @ReactMethod
+    public void showNotificationIfAvailable(final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.getPeople().showNotificationIfAvailable(this.getCurrentActivity());
+        }
+        promise.resolve(null);
+    }
 }

@@ -23,6 +23,7 @@ declare module 'react-native-mixpanel' {
     append(name: string, properties: any[]): Promise<void>
     clearSuperProperties(): Promise<void>
     reset(): Promise<void>
+    showInAppMessageIfAvailable(): Promise<void>
 
     // android only
     setPushRegistrationId(token: string): Promise<void>
@@ -58,6 +59,7 @@ declare module 'react-native-mixpanel' {
     append(name: string, properties: any[]): void;
     clearSuperProperties(): void;
     reset(): void;
+    showInAppMessageIfAvailable(): void;
 
     // android only
     setPushRegistrationId(token: string): void;

@@ -47,7 +47,6 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
 }
 
 // setAppSessionProperties iOS
-// setAppSessionProperties iOS
 RCT_EXPORT_METHOD(setAppSessionPropertiesIOS:(NSDictionary *)properties) {
     if ([properties objectForKey:@"minimumSessionDuration"]) {
         NSNumber *minimumSessionDuration = properties[@"minimumSessionDuration"];
@@ -298,6 +297,14 @@ RCT_EXPORT_METHOD(reset:(NSString *)apiToken
     [[self getInstance:apiToken] reset];
     NSString *uuid = [[NSUUID UUID] UUIDString];
     [[self getInstance:apiToken] identify:uuid];
+    resolve(nil);
+}
+
+// showNotification
+RCT_EXPORT_METHOD(showNotification:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    [[self getInstance:apiToken] showNotification];
     resolve(nil);
 }
 
