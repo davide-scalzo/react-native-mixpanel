@@ -45,7 +45,7 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
                                                  launchOptions:launchOptions
                                                   trackCrashes:trackCrashes
                                          automaticPushTracking:automaticPushTracking
-                                       optOutTrackingByDefault:optOutTrackingByDefault;];
+                                       optOutTrackingByDefault:optOutTrackingByDefault];
 
         // copy instances and add the new instance.  then reassign instances
         NSMutableDictionary *newInstances = [NSMutableDictionary dictionaryWithDictionary:instances];

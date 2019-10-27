@@ -1,3 +1,7 @@
+# 1.1.10
+
+- Fix typo
+
 # 1.1.9
 
 - Expose iOS params that can be passed on Mixpanel instance initalization: trackCrashes, automaticPushTracking, launchOptions
