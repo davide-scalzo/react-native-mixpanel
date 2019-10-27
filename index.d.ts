@@ -1,6 +1,6 @@
 declare module 'react-native-mixpanel' {
   export class MixpanelInstance {
-    constructor(apiToken?: string)
+    constructor(apiToken?: string, optOutTrackingDefault?: boolean, trackCrashes?: boolean, automaticPushTracking?: boolean, launchOptions?: Object)
 
     initialize(): Promise<void>
     getDistinctId(): Promise<string>
@@ -20,8 +20,12 @@ declare module 'react-native-mixpanel' {
     trackChargeWithProperties(charge: number, properties: Object): Promise<void>
     increment(property: string, by: number): Promise<void>
     union(name: string, properties: any[]): Promise<void>
+    append(name: string, properties: any[]): Promise<void>
     clearSuperProperties(): Promise<void>
     reset(): Promise<void>
+    showInAppMessageIfAvailable(): Promise<void>
+    optInTracking(): Promise<void>
+    optOutTracking(): Promise<void>
 
     // android only
     setPushRegistrationId(token: string): Promise<void>
@@ -35,7 +39,7 @@ declare module 'react-native-mixpanel' {
   }
 
   interface MixpanelAPI {
-    sharedInstanceWithToken(apiToken: string): Promise<void>;
+    sharedInstanceWithToken(apiToken: string, optOutTrackingDefault?: boolean, trackCrashes?: boolean, automaticPushTracking?: boolean, launchOptions?: Object): Promise<void>;
     getDistinctId(callback: (id?: string) => void): void;
     getSuperProperty(propertyName: string, callback: (value: any) => void): void;
     track(event: string): void;
@@ -54,8 +58,12 @@ declare module 'react-native-mixpanel' {
     trackChargeWithProperties(charge: number, properties: Object): void;
     increment(property: string, by: number): void;
     union(name: string, properties: any[]): void;
+    append(name: string, properties: any[]): void;
     clearSuperProperties(): void;
     reset(): void;
+    showInAppMessageIfAvailable(): void;
+    optInTracking(): void
+    optOutTracking(): void
 
     // android only
     setPushRegistrationId(token: string): void;

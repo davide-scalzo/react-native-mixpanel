@@ -1,6 +1,6 @@
 // @flow
 'use strict'
-import { NativeModules } from 'react-native'
+import { NativeModules, Platform } from 'react-native'
 const { RNMixpanel } = NativeModules
 
 /*
@@ -17,10 +17,18 @@ However since React Native makes no guarantees about whether native methods are 
 */
 export class MixpanelInstance {
   apiToken: ?string
+  optOutTrackingDefault: boolean
+  trackCrashes: boolean
+  automaticPushTracking: boolean
+  launchOptions: object
   initialized: boolean
 
-  constructor(apiToken: ?string) {
+  constructor(apiToken: ?string, optOutTrackingDefault: ?boolean = false, trackCrashes: ?boolean = true, automaticPushTracking: ?boolean = true, launchOptions: ?Object = null) {
     this.apiToken = apiToken
+    this.optOutTrackingDefault = optOutTrackingDefault
+    this.trackCrashes = trackCrashes
+    this.automaticPushTracking = automaticPushTracking
+    this.launchOptions = launchOptions
     this.initialized = false
   }
 
@@ -28,10 +36,17 @@ export class MixpanelInstance {
   Initializes the instance in native land.  Returns a promise that resolves when the instance has been created and is ready for use.
   */
   initialize(): Promise<void> {
-    return RNMixpanel.sharedInstanceWithToken(this.apiToken)
+    if (Platform.OS === 'ios'){
+      return RNMixpanel.sharedInstanceWithToken(this.apiToken, this.optOutTrackingDefault, this.trackCrashes, this.automaticPushTracking, this.launchOptions)
       .then(() => {
         this.initialized = true
       })
+    } else {
+      return RNMixpanel.sharedInstanceWithToken(this.apiToken, this.optOutTrackingDefault)
+      .then(() => {
+        this.initialized = true
+      })
+    }
   }
 
   /*
@@ -164,6 +179,12 @@ export class MixpanelInstance {
     return RNMixpanel.union(name, properties, this.apiToken)
   }
 
+  append(name: string, properties: any[]): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('append'))
+
+    return RNMixpanel.append(name, properties, this.apiToken)
+  }
+
   removePushDeviceToken(pushDeviceToken: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('removePushDeviceToken'))
 
@@ -203,6 +224,26 @@ export class MixpanelInstance {
 
     return RNMixpanel.reset(this.apiToken)
   }
+
+  showInAppMessageIfAvailable(): Promise<void> {
+    if (!this.initialized) throw uninitializedError('showNotificationIfAvailable')
+
+    if (Platform.OS === "android") {
+        return RNMixpanel.showNotificationIfAvailable(this.apiToken)
+    } else {
+        return RNMixpanel.showNotification(this.apiToken)
+    }
+  }
+
+  optInTracking(): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('optInTracking'))
+    return RNMixpanel.optInTracking(this.apiToken)
+  }
+
+  optOutTracking(): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('optOutTracking'))
+    return RNMixpanel.optOutTracking(this.apiToken)
+  }
 }
 
 /*
@@ -215,8 +256,8 @@ mixpanel.track('my event')
 */
 export default {
 
-  sharedInstanceWithToken(apiToken: string): Promise<void> {
-    const instance = new MixpanelInstance(apiToken)
+  sharedInstanceWithToken(apiToken: string, optOutTrackingDefault: ?boolean = false, trackCrashes: ?boolean = true, automaticPushTracking: ?boolean = true, launchOptions: ?Object = null): Promise<void> {
+    const instance = new MixpanelInstance(apiToken, optOutTrackingDefault)
     if (!defaultInstance) defaultInstance = instance
     return instance.initialize()
   },
@@ -380,6 +421,12 @@ export default {
     defaultInstance.union(name, properties)
   },
 
+  append(name: string, properties: any[]) {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.append(name, properties)
+  },
+
   addPushDeviceToken(token: string) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
@@ -406,4 +453,20 @@ export default {
     defaultInstance.reset()
   },
 
+  showInAppMessageIfAvailable() {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+    defaultInstance.showInAppMessageIfAvailable(token)
+  },
+
+  optInTracking() {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.optInTracking()
+  },
+
+  optOutTracking() {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.optOutTracking()
+  },
 }
