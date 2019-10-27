@@ -92,13 +92,33 @@ var Mixpanel = require('react-native-mixpanel');
 
 // Init Mixpanel SDK with your project token
 //  @param apiToken - your project token
-//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (false by default)
 Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN);
 
 // You can also opt out tracking by default (GDPR)
 //  @param apiToken - your project token
-//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default
-Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, true);
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (default value: false)
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, false);
+
+// You can also disable trackCrashes
+//  @param apiToken - your project token
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (default value: false)
+//  @param trackCrashes (iOS only!) - whether or not to track crashes in Mixpanel. may want to disable if you're seeing  issues with your crash reporting for either signals or exceptions (default value: true)
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, false, true);
+
+// You can also disable automaticPushTracking
+//  @param apiToken - your project token
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (default value: false)
+//  @param trackCrashes (iOS only!) - whether or not to track crashes in Mixpanel. may want to disable if you're seeing  issues with your crash reporting for either signals or exceptions (default value: true)
+//  @param automaticPushTracking (iOS only!) - whether or not to automatically track pushes sent from Mixpanel (default value: true)
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, false, true, true);
+
+// You can also pass launchOptions
+//  @param apiToken - your project token
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (default value: false)
+//  @param trackCrashes (iOS only!) - whether or not to track crashes in Mixpanel. may want to disable if you're seeing  issues with your crash reporting for either signals or exceptions (default value: true)
+//  @param automaticPushTracking (iOS only!) - whether or not to automatically track pushes sent from Mixpanel (default value: true)
+//  @param launchOptions (iOS only!) - your application delegate's launchOptions (default value: null)
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, false, true, true, null);
 
 // Opt in tracking.
 // Use this method to opt in an already opted out user from tracking. People updates and track calls will be sent to Mixpanel after using this method.

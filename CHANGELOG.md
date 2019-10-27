@@ -1,3 +1,8 @@
+# 1.1.9
+
+- Expose iOS params that can be passed on Mixpanel instance initalization: trackCrashes, automaticPushTracking, launchOptions
+- Update Typescript defs and readme
+
 # 1.1.8
 
 - Add support for AppleTV

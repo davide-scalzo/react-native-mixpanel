@@ -18,11 +18,17 @@ However since React Native makes no guarantees about whether native methods are 
 export class MixpanelInstance {
   apiToken: ?string
   optOutTrackingDefault: boolean
+  trackCrashes: boolean
+  automaticPushTracking: boolean
+  launchOptions: object
   initialized: boolean
 
-  constructor(apiToken: ?string, optOutTrackingDefault: ?boolean = false) {
+  constructor(apiToken: ?string, optOutTrackingDefault: ?boolean = false, trackCrashes: ?boolean = true, automaticPushTracking: ?boolean = true, launchOptions: ?Object = null) {
     this.apiToken = apiToken
     this.optOutTrackingDefault = optOutTrackingDefault
+    this.trackCrashes = trackCrashes
+    this.automaticPushTracking = automaticPushTracking
+    this.launchOptions = launchOptions
     this.initialized = false
   }
 
@@ -30,10 +36,17 @@ export class MixpanelInstance {
   Initializes the instance in native land.  Returns a promise that resolves when the instance has been created and is ready for use.
   */
   initialize(): Promise<void> {
-    return RNMixpanel.sharedInstanceWithToken(this.apiToken, this.optOutTrackingDefault)
+    if (Platform.OS === 'ios'){
+      return RNMixpanel.sharedInstanceWithToken(this.apiToken, this.optOutTrackingDefault, this.trackCrashes, this.automaticPushTracking, this.launchOptions)
       .then(() => {
         this.initialized = true
       })
+    } else {
+      return RNMixpanel.sharedInstanceWithToken(this.apiToken, this.optOutTrackingDefault)
+      .then(() => {
+        this.initialized = true
+      })
+    }
   }
 
   /*
@@ -243,7 +256,7 @@ mixpanel.track('my event')
 */
 export default {
 
-  sharedInstanceWithToken(apiToken: string, optOutTrackingDefault: ?boolean = false): Promise<void> {
+  sharedInstanceWithToken(apiToken: string, optOutTrackingDefault: ?boolean = false, trackCrashes: ?boolean = true, automaticPushTracking: ?boolean = true, launchOptions: ?Object = null): Promise<void> {
     const instance = new MixpanelInstance(apiToken, optOutTrackingDefault)
     if (!defaultInstance) defaultInstance = instance
     return instance.initialize()

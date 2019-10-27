@@ -30,6 +30,9 @@ RCT_EXPORT_MODULE(RNMixpanel)
 // sharedInstanceWithToken
 RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
                   optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
+                  trackCrashes:(BOOL)trackCrashes
+                  automaticPushTracking:(BOOL)automaticPushTracking
+                  launchOptions:(nullable NSDictionary *)launchOptions
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
     @synchronized(self) {
@@ -39,7 +42,10 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
         }
 
         Mixpanel *instance = [Mixpanel sharedInstanceWithToken:apiToken
-                                       optOutTrackingByDefault:optOutTrackingByDefault];
+                                                 launchOptions:launchOptions
+                                                  trackCrashes:trackCrashes
+                                         automaticPushTracking:automaticPushTracking
+                                       optOutTrackingByDefault:optOutTrackingByDefault;];
 
         // copy instances and add the new instance.  then reassign instances
         NSMutableDictionary *newInstances = [NSMutableDictionary dictionaryWithDictionary:instances];

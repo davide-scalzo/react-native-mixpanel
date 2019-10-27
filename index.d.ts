@@ -1,6 +1,6 @@
 declare module 'react-native-mixpanel' {
   export class MixpanelInstance {
-    constructor(apiToken?: string, optOutTrackingDefault?: boolean)
+    constructor(apiToken?: string, optOutTrackingDefault?: boolean, trackCrashes?: boolean, automaticPushTracking?: boolean, launchOptions?: Object)
 
     initialize(): Promise<void>
     getDistinctId(): Promise<string>
@@ -39,7 +39,7 @@ declare module 'react-native-mixpanel' {
   }
 
   interface MixpanelAPI {
-    sharedInstanceWithToken(apiToken: string, optOutTrackingDefault?: boolean): Promise<void>;
+    sharedInstanceWithToken(apiToken: string, optOutTrackingDefault?: boolean, trackCrashes?: boolean, automaticPushTracking?: boolean, launchOptions?: Object): Promise<void>;
     getDistinctId(callback: (id?: string) => void): void;
     getSuperProperty(propertyName: string, callback: (value: any) => void): void;
     track(event: string): void;
