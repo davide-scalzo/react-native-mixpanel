@@ -28,6 +28,8 @@ From version 1.1.2 module uses Mixpanel SDK >= 5.6.0 that requires FCM
 
 Autolinking should work out of the box.
 
+Remember to do: pod install.
+
 # Manual Installation
 
 ## Installation iOS ##
