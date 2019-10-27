@@ -1,6 +1,6 @@
 // @flow
 'use strict'
-import { NativeModules } from 'react-native'
+import { NativeModules, Platform } from 'react-native'
 const { RNMixpanel } = NativeModules
 
 /*
