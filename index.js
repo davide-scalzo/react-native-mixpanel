@@ -192,6 +192,21 @@ export class MixpanelInstance {
 
     return RNMixpanel.reset(this.apiToken)
   }
+
+  disableNotificationOnActive(): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('disableNotificationOnActive'))
+
+    if (!RNMixpanel.disableNotificationOnActive) throw new Error('No native implementation for disableNotificationOnActive')
+    return RNMixpanel.disableNotificationOnActive(this.apiToken)
+  }
+
+  showNotification(): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('showNotification'))
+
+    if (!RNMixpanel.showNotification) throw new Error('No native implementation for showNotification');
+
+    return RNMixpanel.showNotification(this.apiToken)
+  }
 }
 
 /*
@@ -379,4 +394,15 @@ export default {
     defaultInstance.reset()
   },
 
+  disableNotificationOnActive() {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR) 
+
+    defaultInstance.disableNotificationOnActive()
+  },
+
+  showNotification() {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.showNotification()
+  },
 }

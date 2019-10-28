@@ -31,6 +31,10 @@ declare module 'react-native-mixpanel' {
     clearPushRegistrationId(): Promise<void>
 
     reset(): Promise<void>
+
+    disableNotificationOnActive(): Promise<void>
+
+    showNotification(): Promise<void>
   }
 
   interface MixpanelAPI {
@@ -64,6 +68,10 @@ declare module 'react-native-mixpanel' {
     clearPushRegistrationId(): void;
 
     reset(): void;
+
+    disableNotificationOnActive(): Promise<void>
+
+    showNotification(): Promise<void>
   }
 
   const mixpanelApi: MixpanelAPI;
