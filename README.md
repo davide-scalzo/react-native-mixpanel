@@ -24,6 +24,12 @@ From version 1.1.2 module uses Mixpanel SDK >= 5.6.0 that requires FCM
 - Allow sub-classes to override push notifications payload and Support when more than one push provider is used [more info here](https://github.com/mixpanel/mixpanel-android/releases/tag/v5.5.1)
 
 
+# Autolinking and RN >= 0.60
+
+Autolinking should work out of the box.
+
+Remember to do: pod install.
+
 # Manual Installation
 
 ## Installation iOS ##
@@ -81,11 +87,47 @@ public class MainActivity extends ReactActivity {
 # Usage
 
 ```js
-//Require the module
+// Require the module
 var Mixpanel = require('react-native-mixpanel');
 
-//Init Mixpanel SDK with your project token
+// Init Mixpanel SDK with your project token
+//  @param apiToken - your project token
 Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN);
+
+// You can also opt out tracking by default (GDPR)
+//  @param apiToken - your project token
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (default value: false)
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, false);
+
+// You can also disable trackCrashes
+//  @param apiToken - your project token
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (default value: false)
+//  @param trackCrashes (iOS only!) - whether or not to track crashes in Mixpanel. may want to disable if you're seeing  issues with your crash reporting for either signals or exceptions (default value: true)
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, false, true);
+
+// You can also disable automaticPushTracking
+//  @param apiToken - your project token
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (default value: false)
+//  @param trackCrashes (iOS only!) - whether or not to track crashes in Mixpanel. may want to disable if you're seeing  issues with your crash reporting for either signals or exceptions (default value: true)
+//  @param automaticPushTracking (iOS only!) - whether or not to automatically track pushes sent from Mixpanel (default value: true)
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, false, true, true);
+
+// You can also pass launchOptions
+//  @param apiToken - your project token
+//  @param optOutTrackingByDefault - whether or not to be opted out from tracking by default (default value: false)
+//  @param trackCrashes (iOS only!) - whether or not to track crashes in Mixpanel. may want to disable if you're seeing  issues with your crash reporting for either signals or exceptions (default value: true)
+//  @param automaticPushTracking (iOS only!) - whether or not to automatically track pushes sent from Mixpanel (default value: true)
+//  @param launchOptions (iOS only!) - your application delegate's launchOptions (default value: null)
+Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, false, true, true, null);
+
+// Opt in tracking.
+// Use this method to opt in an already opted out user from tracking. People updates and track calls will be sent to Mixpanel after using this method.
+Mixpanel.optInTracking();
+
+//  Opt out tracking.
+
+//  This method is used to opt out tracking. This causes all events and people request no longer to be sent back to the Mixpanel server.
+Mixpanel.optOutTracking();
 
 //Send and event name with no properties
 Mixpanel.track("Event name");
@@ -126,19 +168,78 @@ Mixpanel.trackChargeWithProperties(399, {"product": "ACME Wearable tech"});
 // increment property
 Mixpanel.increment("Login Count", 1);
 
+// Append array to a list property
+Mixpanel.append("Lines", ["Simple", "Dashed"]);
+
+// Merge array to a list property, excluding duplicate values
+Mixpanel.union("Lines", ["Dashed", "Custom"]);
+
+// Android
+// Retrieves current Firebase Cloud Messaging token.
+// Should only be called after identify(String) has been called.
+Mixpanel.getPushRegistrationId();
+
 // send push notifications token to Mixpanel
 // Android
 Mixpanel.setPushRegistrationId("GCM/FCM push token");
 
-//tell Mixpanel which user record in People Analytics should receive the messages when they are sent from the Mixpanel app,
-//make sure you call this right after you call `identify`
+// Android
+// tell Mixpanel which user record in People Analytics should receive the messages when they are sent from the Mixpanel app,
+// make sure you call this right after you call `identify`
+// Deprecated. 
+// in 5.5.0. Google Cloud Messaging (GCM) is now deprecated by Google. To enable end-to-end Firebase Cloud Messaging (FCM) from Mixpanel you only need to add the following to your application manifest XML file:
+
+ 
+//  <service
+//        android:name="com.mixpanel.android.mpmetrics.MixpanelFCMMessagingService"
+//        android:enabled="true"
+//        android:exported="false">
+//        <intent-filter>
+//            <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+//        </intent-filter>
+//  </service>
+ 
+ 
+
+// Make sure you have a valid google-services.json file in your project and firebase messaging is included as a dependency. Example:
+
+ 
+//  buildscript {
+//       ...
+//       dependencies {
+//           classpath 'com.google.gms:google-services:4.1.0'
+//           ...
+//       }
+//  }
+
+//  dependencies {
+//      implementation 'com.google.firebase:firebase-messaging:17.3.4'
+//      implementation 'com.mixpanel.android:mixpanel-android:5.5.0'
+//  }
+
+//  apply plugin: 'com.google.gms.google-services'
+
+// We recommend you update your Server Key on mixpanel.com from your Firebase console. Legacy server keys are still supported.
 Mixpanel.initPushHandling(YOUR_12_DIGIT_GOOGLE_SENDER_ID);
 
-//unregister a device for push notifications
-Mixpanel.clearPushRegistrationId();
+// Allows to clear super properites
+Mixpabel.clearSuperProperties();
+
+// Android
+// Unregister an android device for push notifications
+// With token it will clear a single Firebase Cloud Messaging token from Mixpanel.
+// Without token it will clear all current Firebase Cloud Messaging tokens from Mixpanel.
+Mixpanel.clearPushRegistrationId(token?: string); 
 
 // iOS
-Mixpanel.addPushDeviceToken("APNS push token")
+Mixpanel.addPushDeviceToken("APNS push token");
+
+// iOS - unregister iOS device, pushDeviceToken = APNS push token
+Mixpanel.removePushDeviceToken(pushDeviceToken: string); 
+
+// iOS
+// Unregister the given device to receive push notifications.
+Mixpanel.removeAllPushDeviceTokens();
 
 // Mixpanel reset method (warning: it will also generate a new unique id and call the identify method with it. Thus, the user will not be anonymous in Mixpanel.)
 Mixpanel.reset();
@@ -146,6 +247,32 @@ Mixpanel.reset();
 // get the last distinct id set with identify or, if identify hasn't been
 // called, the default mixpanel id for this device.
 Mixpanel.getDistinctId(function(id){})
+```
+
+## Displaying in-app messages ##
+
+By default, in-app messages are shown to users when the app starts and a message is available to display
+This behaviour can be disabled by default, and explicitally triggered at a later time (e.g. after your loading sequence)
+
+For iOS, in your app delegate, add the following line:
+
+```
+// In application:didFinishLaunchingWithOptions:
+Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:YOUR_MIXPANEL_TOKEN];
+// Turn this off so the message doesn't pop up automatically.
+mixpanel.showNotificationOnActive = NO;
+```
+
+For Android, add the following to your app mainifest in the `<application>` tag:
+
+```
+<meta-data android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates" android:value="false" />
+```
+
+You can then call the following in your react native application:
+
+```
+Mixpanel.showInAppMessageIfAvailable();
 ```
 
 ## Notes ##
