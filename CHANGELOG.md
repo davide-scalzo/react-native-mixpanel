@@ -1,3 +1,7 @@
+# 1.1.11
+
+- [iOS] Add missing file
+
 # 1.1.10
 
 - Fix typo

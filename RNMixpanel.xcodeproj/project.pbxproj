@@ -38,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		5EAEEA411F0555B100C6FED8 /* libRNMixpanel-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libRNMixpanel-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7588479238556670081D7FF /* MixpanelType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MixpanelType.h; sourceTree = "<group>"; };
 		E78DD5BC2364BED0009197B6 /* MixpanelPeople.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelPeople.h; sourceTree = "<group>"; };
 		FDC64AF01BF1690D0044C1B4 /* libRNMixpanel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNMixpanel.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDC64AF31BF1690D0044C1B4 /* RNMixpanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNMixpanel.h; sourceTree = "<group>"; };
@@ -88,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				E78DD5BC2364BED0009197B6 /* MixpanelPeople.h */,
+				E7588479238556670081D7FF /* MixpanelType.h */,
 				FDDAC2A11BF2B66500E70D3C /* Mixpanel.h */,
 				FDC64AF31BF1690D0044C1B4 /* RNMixpanel.h */,
 				FDC64AF51BF1690D0044C1B4 /* RNMixpanel.m */,
