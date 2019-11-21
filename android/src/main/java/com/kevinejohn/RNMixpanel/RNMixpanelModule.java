@@ -189,10 +189,11 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
 
     @ReactMethod
-    public void createAlias(final String old_id, final String apiToken, Promise promise) {
+    public void createAlias(final String alias, final String oldDistinctID, final String apiToken, Promise promise) {
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.alias(old_id, instance.getDistinctId());
+            String distinctID = (oldDistinctID != null) ? oldDistinctID : instance.getDistinctId();
+            instance.alias(alias, distinctID);
         }
         promise.resolve(null);
     }
