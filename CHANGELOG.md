@@ -1,6 +1,11 @@
+# 1.1.14
+
+- [Android] Add check against potential NPE 
+- Update Readme
+
 # 1.1.13
 
-- Update mixpanel-android to 5.6.8
+- [Android] Update mixpanel-android SDK to 5.6.8
 
 # 1.1.12
 
