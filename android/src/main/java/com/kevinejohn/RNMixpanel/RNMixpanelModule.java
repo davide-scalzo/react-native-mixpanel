@@ -182,7 +182,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.track(name, obj);
+            if (obj != null) {
+                instance.track(name, obj);
+            }
         }
         promise.resolve(null);
     }
@@ -227,7 +229,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.registerSuperProperties(obj);
+            if (obj != null) {
+                instance.registerSuperProperties(obj);
+            }
         }
         promise.resolve(null);
     }
@@ -242,7 +246,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.registerSuperPropertiesOnce(obj);
+            if (obj != null) {
+                instance.registerSuperPropertiesOnce(obj);
+            }
         }
         promise.resolve(null);
     }
@@ -276,7 +282,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
 
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.getPeople().set(obj);
+            if (obj != null) {
+                instance.getPeople().set(obj);
+            }
         }
         promise.resolve(null);
     }
@@ -291,7 +299,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.getPeople().setOnce(obj);
+            if (obj != null) {
+                instance.getPeople().setOnce(obj);
+            }
         }
         promise.resolve(null);
     }
@@ -352,7 +362,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.getPeople().trackCharge(charge, obj);
+            if (obj != null) {
+                instance.getPeople().trackCharge(charge, obj);
+            }
         }
         promise.resolve(null);
     }
@@ -376,7 +388,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.getPeople().union(name, obj);
+            if (obj != null) {
+                instance.getPeople().union(name, obj);
+            }
         }
         promise.resolve(null);
     }
@@ -391,7 +405,9 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
-            instance.getPeople().append(name, obj);
+            if (obj != null) {
+                instance.getPeople().append(name, obj);
+            }
         }
         promise.resolve(null);
     }
