@@ -289,5 +289,7 @@ You can then call the following in your react native application:
 Mixpanel.showInAppMessageIfAvailable();
 ```
 
+More info: https://developer.mixpanel.com/docs/android-inapp-messages
+
 ## Notes ##
 For more info please have a look at the [official Mixpanel reference](https://mixpanel.com/help/reference/ios) for iOS
