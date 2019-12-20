@@ -8,7 +8,7 @@ declare module 'react-native-mixpanel' {
     track(event: string, properties?: Object): Promise<void>
     flush(): Promise<void>
     disableIpAddressGeolocalization(): Promise<void>
-    alias(alias: string): Promise<void>
+    alias(alias: string, oldDistinctID?: string): Promise<void>
     identify(userId: string): Promise<void>
     timeEvent(event: string): Promise<void>
     registerSuperProperties(properties: Object): Promise<void>
@@ -46,7 +46,7 @@ declare module 'react-native-mixpanel' {
     trackWithProperties(event: string, properties: Object): void;
     flush(): void;
     disableIpAddressGeolocalization(): void;
-    createAlias(alias: string): void;
+    createAlias(alias: string, oldDistinctID?: string): void;
     identify(userId: string): void;
     timeEvent(event: string): void;
     registerSuperProperties(properties: Object): void;

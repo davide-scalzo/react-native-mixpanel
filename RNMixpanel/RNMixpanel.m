@@ -124,11 +124,13 @@ RCT_EXPORT_METHOD(flush:(NSString *)apiToken
 }
 
 // create Alias
-RCT_EXPORT_METHOD(createAlias:(NSString *)old_id
+RCT_EXPORT_METHOD(createAlias:(NSString *)alias
+                  oldDistinctID:(nullable NSString *)oldDistinctID
                   apiToken:(NSString *)apiToken
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-    [[self getInstance:apiToken] createAlias:old_id forDistinctID:[self getInstance:apiToken].distinctId];
+    NSString *distinctId = oldDistinctID ? oldDistinctID : [self getInstance:apiToken].distinctId;
+    [[self getInstance:apiToken] createAlias:alias forDistinctID:distinctId];
     resolve(nil);
 }
 

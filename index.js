@@ -102,10 +102,10 @@ export class MixpanelInstance {
     return RNMixpanel.disableIpAddressGeolocalization(this.apiToken)
   }
 
-  alias(alias: string): Promise<void> {
+  alias(alias: string, oldDistinctID?: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('createAlias'))
 
-    return RNMixpanel.createAlias(alias, this.apiToken)
+    return RNMixpanel.createAlias(alias, oldDistinctID, this.apiToken)
   }
 
   identify(userId: string): Promise<void> {
@@ -331,10 +331,10 @@ export default {
       defaultInstance.disableIpAddressGeolocalization()
   },
 
-  createAlias(alias: string) {
+  createAlias(alias: string, oldDistinctID: ?string = null) {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
-    defaultInstance.alias(alias)
+    defaultInstance.alias(alias, oldDistinctID)
   },
 
   identify(userId: string) {

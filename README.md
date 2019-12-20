@@ -124,27 +124,41 @@ Mixpanel.sharedInstanceWithToken(YOUR_PROJECT_TOKEN, false, true, true, null);
 // Use this method to opt in an already opted out user from tracking. People updates and track calls will be sent to Mixpanel after using this method.
 Mixpanel.optInTracking();
 
-//  Opt out tracking.
+// Opt out tracking.
 
-//  This method is used to opt out tracking. This causes all events and people request no longer to be sent back to the Mixpanel server.
+// This method is used to opt out tracking. This causes all events and people request no longer to be sent back to the Mixpanel server.
 Mixpanel.optOutTracking();
 
-//Send and event name with no properties
+// Send and event name with no properties
 Mixpanel.track("Event name");
 
-//Track event with properties
+// Track event with properties
 Mixpanel.trackWithProperties('Click Button', {button_type: 'yellow button', button_text: 'magic button'});
 
-//Create Alias from unique id, i.e. create a new mixpanel profile: to call when a user signs up, with a unique id that is not used by another mixpanel profile as param
+// Create Alias from unique id, i.e. create a new mixpanel profile: to call when a user signs up, with a unique id that is not used by another mixpanel profile as param
 Mixpanel.createAlias(UNIQUE_ID)
 
-//Identify, i.e. associate to an existing mixpanel profile: to call when a user logs in and is already registered in Mixpanel with this unique id
+// OR: 
+
+// Create an alias, which Mixpanel will use to link two distinct_ids going forward (not retroactively). Multiple aliases can map to the same original ID, but not vice-versa.
+// Aliases can also be chained - the following is a valid scenario:
+Mixpanel.createAlias('new_id', 'existing_id');
+...
+Mixpanel.createAlias('newer_id', 'new_id');
+// If the original ID is not passed in, we will use the current distinct_id - probably the auto-generated GUID.
+// Notes: 
+// The best practice is to call createAlias() when a unique ID is first created for a user (e.g., when a user first registers for
+// an account and provides an email address). createAlias() should never be called more than once for a given user, except to chain
+// a newer ID to a previously new ID, as described above.
+// More info about createAlias: https://developer.mixpanel.com/docs/javascript-full-api-reference#section-mixpanel-alias
+
+// Identify, i.e. associate to an existing mixpanel profile: to call when a user logs in and is already registered in Mixpanel with this unique id
 Mixpanel.identify(UNIQUE_ID)
 
-//Set People properties (warning: if no mixpanel profile has been assigned to the current user when this method is called, it will automatically create a new mixpanel profile and the user will no longer be anonymous in Mixpanel)
+// Set People properties (warning: if no mixpanel profile has been assigned to the current user when this method is called, it will automatically create a new mixpanel profile and the user will no longer be anonymous in Mixpanel)
 Mixpanel.set({"$email": "elvis@email.com"});
 
-//Set People Properties Once (warning: if no mixpanel profile has been assigned to the current user when this method is called, it will automatically create a new mixpanel profile and the user will no longer be anonymous in Mixpanel)
+// Set People Properties Once (warning: if no mixpanel profile has been assigned to the current user when this method is called, it will automatically create a new mixpanel profile and the user will no longer be anonymous in Mixpanel)
 Mixpanel.setOnce({"$email": "elvis@email.com", "Created": new Date().toISOString()});
 
 // Timing Events
@@ -274,6 +288,8 @@ You can then call the following in your react native application:
 ```
 Mixpanel.showInAppMessageIfAvailable();
 ```
+
+More info: https://developer.mixpanel.com/docs/android-inapp-messages
 
 ## Notes ##
 For more info please have a look at the [official Mixpanel reference](https://mixpanel.com/help/reference/ios) for iOS
