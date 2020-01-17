@@ -211,6 +211,24 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
+    public void addGroup(final String groupKey, final String groupId, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.addGroup(groupKey, groupId);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void setGroup(final String groupKey, final String groupId, final String apiToken, Promise promise) {
+        final MixpanelAPI instance = getInstance(apiToken);
+        synchronized(instance) {
+            instance.setGroup(groupKey, groupId);
+        }
+        promise.resolve(null);
+    }
+
+    @ReactMethod
     public void timeEvent(final String event, final String apiToken, Promise promise) {
         final MixpanelAPI instance = getInstance(apiToken);
         synchronized(instance) {
