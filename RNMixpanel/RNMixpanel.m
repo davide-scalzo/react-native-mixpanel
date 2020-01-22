@@ -143,6 +143,26 @@ RCT_EXPORT_METHOD(identify:(NSString *) uniqueId
     resolve(nil);
 }
 
+// add Group
+RCT_EXPORT_METHOD(addGroup:(NSString *)groupKey
+                  groupId:(NSString *)groupId
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    [[self getInstance:apiToken] addGroup:groupKey groupID:groupId];
+    resolve(nil);
+}
+
+// set Group
+RCT_EXPORT_METHOD(setGroup:(NSString *)groupKey
+                  groupId:(NSString *)groupId
+                  apiToken:(NSString *)apiToken
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+    [[self getInstance:apiToken] setGroup:groupKey groupID:groupId];
+    resolve(nil);
+}
+
 // Timing Events
 RCT_EXPORT_METHOD(timeEvent:(NSString *)event
                   apiToken:(NSString *)apiToken

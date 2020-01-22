@@ -161,6 +161,16 @@ Mixpanel.set({"$email": "elvis@email.com"});
 // Set People Properties Once (warning: if no mixpanel profile has been assigned to the current user when this method is called, it will automatically create a new mixpanel profile and the user will no longer be anonymous in Mixpanel)
 Mixpanel.setOnce({"$email": "elvis@email.com", "Created": new Date().toISOString()});
 
+// Add a new Group for this user.
+// @param Group key
+// @param A valid Mixpanel property type
+Mixpanel.setGroup('company', 'mixpanel');
+
+// Register the current user into one Group. The Group must be added before setting
+// @param Group key
+// @param a singular group ID
+Mixpanel.setGroup('company', 'mixpanel');
+
 // Timing Events
 // Sets the start time for an action, for example uploading an image
 Mixpanel.timeEvent("Image Upload");

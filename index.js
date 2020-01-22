@@ -114,6 +114,18 @@ export class MixpanelInstance {
     return RNMixpanel.identify(userId, this.apiToken)
   }
 
+  addGroup(groupKey: string, groupId: string): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('addGroup'))
+
+    return RNMixpanel.addGroup(groupKey, groupId, this.apiToken)
+  }
+
+  setGroup(groupKey: string, groupId: string): Promise<void> {
+      if (!this.initialized) throw new Error(uninitializedError('setGroup'))
+
+      return RNMixpanel.setGroup(groupKey, groupId, this.apiToken)
+  }
+
   timeEvent(event: string): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('timeEvent'))
 
@@ -341,6 +353,18 @@ export default {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
     defaultInstance.identify(userId)
+  },
+
+  addGroup(groupKey: string, groupId: string) {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.addGroup(groupKey, groupId)
+  },
+
+  setGroup(groupKey: string, groupId: string) {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.setGroup(groupKey, groupId)
   },
 
   timeEvent(event: string) {

@@ -10,6 +10,8 @@ declare module 'react-native-mixpanel' {
     disableIpAddressGeolocalization(): Promise<void>
     alias(alias: string, oldDistinctID?: string): Promise<void>
     identify(userId: string): Promise<void>
+    addGroup(groupKey: string, groupId: string): Promise<void>
+    setGroup(groupKey: string, groupId: string): Promise<void>
     timeEvent(event: string): Promise<void>
     registerSuperProperties(properties: Object): Promise<void>
     registerSuperPropertiesOnce(properties: Object): Promise<void>
@@ -48,6 +50,8 @@ declare module 'react-native-mixpanel' {
     disableIpAddressGeolocalization(): void;
     createAlias(alias: string, oldDistinctID?: string): void;
     identify(userId: string): void;
+    addGroup(groupKey: string, groupId: string): void;
+    setGroup(groupKey: string, groupId: string): void;
     timeEvent(event: string): void;
     registerSuperProperties(properties: Object): void;
     registerSuperPropertiesOnce(properties: Object): void;
