@@ -1,4 +1,9 @@
 declare module 'react-native-mixpanel' {
+  interface AppSessionProperties {
+    minimumSessionDuration: number;
+    maximumSessionDuration: number;
+  }
+
   export class MixpanelInstance {
     constructor(apiToken?: string, optOutTrackingDefault?: boolean, trackCrashes?: boolean, automaticPushTracking?: boolean, launchOptions?: Object)
 
@@ -35,6 +40,7 @@ declare module 'react-native-mixpanel' {
     getPushRegistrationId(): Promise<string>
 
     // iOS only
+    setAppSessionPropertiesIOS(properties: AppSessionProperties): Promise<void>;
     removePushDeviceToken(pushDeviceToken: string): Promise<void>
     removeAllPushDeviceTokens(): Promise<void>
     addPushDeviceToken(token: string): Promise<void>
@@ -76,6 +82,7 @@ declare module 'react-native-mixpanel' {
 
     // iOS only
     addPushDeviceToken(token: string): void;
+    setAppSessionPropertiesIOS(properties: AppSessionProperties): Promise<void>;
     removePushDeviceToken(pushDeviceToken: string): void;
     removeAllPushDeviceTokens(): void;
   }
