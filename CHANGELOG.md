@@ -1,3 +1,7 @@
+# 1.2.1
+
+- [Android] Update mixpanel-android SDK to 5.8.3
+
 # 1.1.14
 
 - [Android] Add check against potential NPE 
