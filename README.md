@@ -281,7 +281,7 @@ This behaviour can be disabled by default, and explicitally triggered at a later
 For iOS, in your app delegate, add the following line:
 
 ```
-// In application:didFinishLaunchingWithOptions:
+// In (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions:
 Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:YOUR_MIXPANEL_TOKEN];
 // Turn this off so the message doesn't pop up automatically.
 mixpanel.showNotificationOnActive = NO;
