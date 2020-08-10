@@ -281,6 +281,11 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
+    public void initPushHandling (final String token, final String apiToken, Promise promise) {
+        promise.resolve(null);
+    }
+
+    @ReactMethod
     public void set(final ReadableMap properties, final String apiToken, Promise promise) {
         JSONObject obj = null;
         try {
