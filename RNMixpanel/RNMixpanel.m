@@ -47,6 +47,11 @@ RCT_EXPORT_METHOD(sharedInstanceWithToken:(NSString *)apiToken
                                          automaticPushTracking:automaticPushTracking
                                        optOutTrackingByDefault:optOutTrackingByDefault];
 
+        NSString *serverURL = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"com.mixpanel.config.serverURL"];
+        if (serverURL != nil) {
+            instance.serverURL = serverURL;
+        }
+
         // copy instances and add the new instance.  then reassign instances
         NSMutableDictionary *newInstances = [NSMutableDictionary dictionaryWithDictionary:instances];
         [newInstances setObject:instance forKey:apiToken];
