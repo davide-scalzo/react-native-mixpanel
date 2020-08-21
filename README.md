@@ -301,5 +301,27 @@ Mixpanel.showInAppMessageIfAvailable();
 
 More info: https://developer.mixpanel.com/docs/android-inapp-messages
 
+## Configure mixpanel urls
+
+Add server url in `.plist` files in iOS project.
+
+```
+<key>com.mixpanel.config.serverURL</key>
+<string>https://api-eu.mixpanel.com</string>
+```
+
+Add endpoints to `manifest` in your Android project.
+
+```
+<application ...>
+    <meta-data android:name="com.mixpanel.android.MPConfig.EventsEndpoint"
+        android:value="https://api-eu.mixpanel.com/track" />
+    <meta-data android:name="com.mixpanel.android.MPConfig.PeopleEndpoint"
+        android:value="https://api-eu.mixpanel.com/engage" />
+    <meta-data android:name="com.mixpanel.android.MPConfig.GroupsEndpoint"
+        android:value="https://api-eu.mixpanel.com/groups" />
+</application>
+```
+
 ## Notes ##
 For more info please have a look at the [official Mixpanel reference](https://mixpanel.com/help/reference/ios) for iOS
