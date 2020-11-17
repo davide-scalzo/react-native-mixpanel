@@ -281,11 +281,10 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
     }
 
     @ReactMethod
-    public void initPushHandling (final String token, final String apiToken, Promise promise) {
-        final MixpanelAPI instance = getInstance(apiToken);
-        synchronized(instance) {
-            instance.getPeople().initPushHandling(token);
-        }
+    public void initPushHandling(final String token, final String apiToken, Promise promise) {
+        // MixpanelAPI.initPushHandling is deprecated.
+        // Mixpanel now uses Firebase Cloud Messaging.
+        // initPushHandling will be removed in a future version.
         promise.resolve(null);
     }
 
