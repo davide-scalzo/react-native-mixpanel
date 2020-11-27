@@ -265,6 +265,13 @@ Mixpanel.removePushDeviceToken(pushDeviceToken: string);
 // Unregister the given device to receive push notifications.
 Mixpanel.removeAllPushDeviceTokens();
 
+// iOS
+// Allows control of the min/max sessions 
+Mixpanel.setAppSessionPropertiesIOS({
+  minimumSessionDuration: 60,
+  maximumSessionDuration: 10,
+});
+
 // Mixpanel reset method (warning: it will also generate a new unique id and call the identify method with it. Thus, the user will not be anonymous in Mixpanel.)
 Mixpanel.reset();
 

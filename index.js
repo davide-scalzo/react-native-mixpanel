@@ -203,6 +203,12 @@ export class MixpanelInstance {
     return RNMixpanel.removePushDeviceToken(pushDeviceToken, this.apiToken)
   }
 
+  setAppSessionPropertiesIOS(properties: Object): Promise<void> {
+    if (!this.initialized) throw new Error(uninitializedError('setAppSessionPropertiesIOS'))
+
+    return RNMixpanel.setAppSessionPropertiesIOS(properties)
+  }
+
   removeAllPushDeviceTokens(): Promise<void> {
     if (!this.initialized) throw new Error(uninitializedError('removeAllPushDeviceTokens'))
 
@@ -413,6 +419,12 @@ export default {
     if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
 
     defaultInstance.removePushDeviceToken(pushDeviceToken)
+  },
+
+  setAppSessionPropertiesIOS(properties: Object) {
+    if (!defaultInstance) throw new Error(NO_INSTANCE_ERROR)
+
+    defaultInstance.setAppSessionPropertiesIOS(properties)
   },
 
   removeAllPushDeviceTokens() {
