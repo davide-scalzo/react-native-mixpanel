@@ -481,7 +481,11 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
             return;
         }
         synchronized(instance) {
-            instance.getPeople().showNotificationIfAvailable(this.getCurrentActivity());
+            Activity activity = this.getCurrentActivity();
+
+            if(activity != null){
+                instance.getPeople().showNotificationIfAvailable(this.getCurrentActivity());
+            }
         }
         promise.resolve(null);
     }
