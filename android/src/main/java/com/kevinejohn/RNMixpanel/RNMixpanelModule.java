@@ -483,9 +483,10 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
         }
         synchronized(instance) {
             Activity activity = this.getCurrentActivity();
+            MixpanelAPI.People people = instance.getPeople();
 
-            if(activity != null){
-                instance.getPeople().showNotificationIfAvailable(activity);
+            if(activity != null && people != null){
+                people.showNotificationIfAvailable(activity);
             }
         }
         promise.resolve(null);
