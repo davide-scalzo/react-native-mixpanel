@@ -484,7 +484,7 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
             Activity activity = this.getCurrentActivity();
 
             if(activity != null){
-                instance.getPeople().showNotificationIfAvailable(this.getCurrentActivity());
+                instance.getPeople().showNotificationIfAvailable(activity);
             }
         }
         promise.resolve(null);
