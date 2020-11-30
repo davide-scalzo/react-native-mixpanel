@@ -1,5 +1,6 @@
 package com.kevinejohn.RNMixpanel;
 
+import android.app.Activity;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
