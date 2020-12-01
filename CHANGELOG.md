@@ -1,3 +1,7 @@
+# 1.2.5
+
+- [Android] Fix an uncommon issue with this.getCurrentActivity returning null inside of showInAppMessageIfAvailable
+
 # 1.2.4
 
 - [Android] Update Mixpanel Android SDK to 5.8.5

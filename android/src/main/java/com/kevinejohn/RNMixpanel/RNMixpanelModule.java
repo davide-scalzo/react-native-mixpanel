@@ -1,5 +1,6 @@
 package com.kevinejohn.RNMixpanel;
 
+import android.app.Activity;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -481,7 +482,12 @@ public class RNMixpanelModule extends ReactContextBaseJavaModule implements Life
             return;
         }
         synchronized(instance) {
-            instance.getPeople().showNotificationIfAvailable(this.getCurrentActivity());
+            Activity activity = this.getCurrentActivity();
+            MixpanelAPI.People people = instance.getPeople();
+
+            if(activity != null && people != null){
+                people.showNotificationIfAvailable(activity);
+            }
         }
         promise.resolve(null);
     }
