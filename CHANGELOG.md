@@ -1,6 +1,7 @@
 # 1.2.5
 
 - [Android] Fix an uncommon issue with this.getCurrentActivity returning null inside of showInAppMessageIfAvailable
+- [iOS] Add access to setAppSessionPropertiesIOS
 
 # 1.2.4
 
