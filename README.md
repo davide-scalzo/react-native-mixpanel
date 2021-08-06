@@ -1,3 +1,8 @@
+
+# DEPRECATED
+Please check out the official bindings at https://github.com/mixpanel/mixpanel-react-native 
+
+
 ![npm](https://img.shields.io/npm/dt/react-native-mixpanel.svg?style=for-the-badge)
 
 ![npm](https://img.shields.io/npm/dm/react-native-mixpanel.svg?style=for-the-badge)
